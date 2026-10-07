@@ -1,0 +1,4 @@
+playwright>=1.55
+Pillow>=11
+qrcode>=8
+zxing-cpp>=3
