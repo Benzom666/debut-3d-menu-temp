@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171815">
+  <meta name="description" content="Explore the Début menu: fresh bowls, burgers, Eastern flavours, pasta, desserts and drinks.">
+  <title>DÉBUT — Menu</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171815'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia' font-size='40' fill='%23e9b848'%3ED%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="menu-data.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#menu">Skip to menu</a>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Début, back to top"><span class="brand-mark">D</span><span>DÉBUT</span></a>
+      <span class="topbar-label">FOOD & DRINK MENU</span>
+      <a class="topbar-link" href="#menu">EXPLORE <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> THE DÉBUT EXPERIENCE</p>
+          <h1 id="hero-title">Find your<br><em>new favourite.</em></h1>
+          <p class="hero-intro">From comfort food to bold flavours, there’s always something worth coming back for.</p>
+          <a class="hero-cta" href="#menu">Explore the menu <span aria-hidden="true">↘</span></a>
+          <div class="hero-index"><span>01 — 12</span><span>GOOD FOOD. GOOD COMPANY.</span></div>
+        </div>
+        <div class="hero-art" aria-label="Burger, butter chicken and shrimp pasta" role="img">
+          <div class="hero-orbit orbit-one"></div>
+          <div class="hero-orbit orbit-two"></div>
+          <div class="hero-disc"></div>
+          <img src="debut-food-hero.png" alt="" width="1256" height="1256" fetchpriority="high">
+          <div class="hero-art-label">DÉBUT<br><span>ON THE TABLE</span></div>
+        </div>
+      </section>
+
+      <div class="ticker" aria-hidden="true"><span>FRESHLY MADE</span><b>✦</b><span>FULL OF FLAVOUR</span><b>✦</b><span>MADE TO SHARE</span><b>✦</b><span>FRESHLY MADE</span><b>✦</b><span>FULL OF FLAVOUR</span></div>
+
+      <nav class="category-nav" aria-label="Menu categories"><div id="category-links" class="category-links"></div></nav>
+
+      <section class="menu-intro" id="menu" aria-labelledby="menu-title">
+        <div><p class="eyebrow">THE MENU</p><h2 id="menu-title">Whatever you're<br><em>in the mood for.</em></h2></div>
+        <div class="menu-intro-side"><p>Choose a section and explore the full menu. Prices are in Canadian dollars.</p><a class="print-download" href="DEBUT-3D-Menu-Print.pdf" download>Download print menu <span aria-hidden="true">↗</span></a></div>
+      </section>
+
+      <div class="menu-layout">
+        <aside class="menu-aside" aria-hidden="true"><span>THE DÉBUT MENU</span><span class="aside-rule"></span><span>EST. FOR GOOD TIMES</span></aside>
+        <div id="sections" class="sections"></div>
+      </div>
+
+      <footer class="site-footer"><div class="footer-brand">DÉBUT<span>✦</span></div><p id="menu-note"></p><a href="#top">Back to top ↑</a></footer>
+    </main>
+  </div>
+</body>
+</html>
