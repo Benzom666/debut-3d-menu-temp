@@ -164,8 +164,6 @@
   $('plate-scene').addEventListener('touchstart',event=>{touchStartX=event.changedTouches[0].screenX;touchStartY=event.changedTouches[0].screenY;},{passive:true});
   $('plate-scene').addEventListener('touchend',event=>{const dx=event.changedTouches[0].screenX-touchStartX,dy=event.changedTouches[0].screenY-touchStartY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4)selectDish(active+(dx<0?1:-1));},{passive:true});
   $('add-featured').addEventListener('click',()=>{ changeQuantity(dishes[active].id,1); flyToCart(); $('live-message').textContent=`${dishes[active].name} added to order`; });
-  const menuToggle = $('order-menu-toggle');
-  menuToggle?.addEventListener('click', () => { const open = menuToggle.getAttribute('aria-expanded') !== 'true'; menuToggle.setAttribute('aria-expanded', String(open)); $('order-site-nav').classList.toggle('is-open', open); });
   cartButton.addEventListener('click',openCart); $('close-cart').addEventListener('click',closeCart); backdrop.addEventListener('click',closeCart);
   drawer.addEventListener('keydown',event=>{ if(event.key!=='Tab')return; const focusables=[...drawer.querySelectorAll('button:not(:disabled),input,select,textarea,a[href]')].filter(el=>el.getClientRects().length); const first=focusables[0],last=focusables.at(-1); if(event.shiftKey && document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey && document.activeElement===last){event.preventDefault();first.focus()} });
   search.addEventListener('input',renderRail); renderFilters(); renderRail(); renderFeatured(); renderCart();
