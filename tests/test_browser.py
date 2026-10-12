@@ -43,6 +43,9 @@ class BrowserMenuTests(unittest.TestCase):
         self.assertEqual(cards.locator("img[loading='lazy']").count(), 92)
         cards.first.locator("button").click()
         self.assertTrue(page.get_by_role("dialog").is_visible())
+        self.assertTrue(page.locator("#viewer-image").is_visible())
+        self.assertFalse(page.locator("#viewer-model").is_visible())
+        self.assertIn("DISH ILLUSTRATION", page.locator("#viewer-kind").inner_text())
         self.assertIn("Butter Chicken Poutine", page.get_by_role("dialog").inner_text())
         page.get_by_role("button", name="Next item").click()
         self.assertIn("Chicken Quesadilla", page.get_by_role("dialog").inner_text())
@@ -56,6 +59,31 @@ class BrowserMenuTests(unittest.TestCase):
         qr = page.locator(".scan-code img")
         self.assertTrue(qr.is_visible())
         self.assertIn("github.io", page.locator(".scan-code a").get_attribute("href"))
+        page.close()
+
+    def test_real_model_metadata_activates_rotation_zoom_and_ar_viewer(self):
+        page = self.browser.new_page(viewport={"width": 390, "height": 844})
+        page.add_init_script("""(() => {
+          customElements.define('model-viewer', class extends HTMLElement {});
+          let menu;
+          Object.defineProperty(window, 'DEBUT_MENU', {
+            configurable: true,
+            get() { return menu; },
+            set(value) {
+              value.sections[0].items[0].model = { glb: 'models/test-dish.glb', usdz: 'models/test-dish.usdz' };
+              menu = value;
+            },
+          });
+        })()""")
+        page.goto((ROOT / "dist" / "menu" / "index.html").as_uri())
+        page.locator(".menu-item button").first.click()
+        model = page.locator("#viewer-model")
+        self.assertTrue(model.is_visible())
+        self.assertTrue(model.get_attribute("src").endswith("models/test-dish.glb"))
+        self.assertTrue(model.get_attribute("ios-src").endswith("models/test-dish.usdz"))
+        self.assertIsNotNone(model.get_attribute("camera-controls"))
+        self.assertIsNotNone(model.get_attribute("ar"))
+        self.assertFalse(page.locator("#viewer-image").is_visible())
         page.close()
 
 

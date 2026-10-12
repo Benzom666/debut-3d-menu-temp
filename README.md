@@ -21,7 +21,7 @@ Open `http://localhost:8000/`. The temporary public address is `https://benzom66
 
 Ordering goes to the verified Clover ordering URL. Staff login still opens the original admin at `debutbar.ca/admin`. The booking page uses phone and email because the original reservation data endpoint needs server-side access control before directing new guests to that form. No reservation data is collected by this static site.
 
-The food and drink visuals are illustrations, not rotatable 3D assets or augmented reality models. The print PDF QR opens the `/menu/` route on the temporary public domain. Actual item presentation may vary.
+The food and drink visuals are illustrations, not rotatable 3D assets or augmented reality models. The menu now supports real GLB/USDZ files when available; see the [3D asset brief](docs/3d-asset-brief.md). Until each item has a model, its viewer shows the illustration and makes no rotation or AR claim. The print PDF QR opens the `/menu/` route on the temporary public domain. Actual item presentation may vary.
 
 A [replacement reservation service](reservation-api/README.md) is under local development. It includes a private staff dashboard and D1-backed API, but the public site does not collect reservations through it until staff identities, notifications, and hosted storage are configured and verified.
 
