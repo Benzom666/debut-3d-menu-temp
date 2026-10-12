@@ -6,7 +6,8 @@
   const dishes = source.sections.flatMap(section => excluded.has(section.id) ? [] : section.items.map((item, index) => ({
     ...item, section: section.title, sectionId: section.id,
     id: `${section.id}-${String(index + 1).padStart(2, '0')}`,
-    image: `${assetPrefix}images/generated/${section.id}-${String(index + 1).padStart(2, '0')}.webp`
+    image: `${assetPrefix}images/generated/${section.id}-${String(index + 1).padStart(2, '0')}.webp`,
+    thumbnail: `${assetPrefix}images/generated/thumbs/${section.id}-${String(index + 1).padStart(2, '0')}.webp`
   }))).filter(item => typeof item.price === 'number' && Number.isFinite(item.price));
   const $ = id => document.getElementById(id);
   const money = amount => '$' + amount.toFixed(2);
@@ -113,7 +114,7 @@
     if (!visible.length) { const empty = document.createElement('p'); empty.className='empty-result'; empty.textContent='No dishes match your search.'; rail.append(empty); return; }
     visible.forEach(dish => {
       const button = document.createElement('button'); button.type='button'; button.dataset.itemId=dish.id;
-      const thumb=document.createElement('img'); thumb.src=dish.image; thumb.alt=''; thumb.loading='lazy';
+      const thumb=document.createElement('img'); thumb.src=dish.thumbnail; thumb.alt=''; thumb.loading='lazy'; thumb.decoding='async'; thumb.width=320; thumb.height=320;
       const copy=document.createElement('span'); const name=document.createElement('strong'); name.textContent=dish.name; const price=document.createElement('small'); price.textContent=`${dish.section} · ${money(dish.price)}`;
       copy.append(name,price); button.append(thumb,copy);
       button.classList.toggle('active', dishes[active].id === dish.id);
@@ -129,7 +130,7 @@
       const qty=cart[dish.id] || 0; if (!qty) return;
       subtotal += Math.round(dish.price * 100) * qty; count += qty;
       const row=document.createElement('div'); row.className='cart-item';
-      const img=document.createElement('img'); img.src=dish.image; img.alt='';
+      const img=document.createElement('img'); img.src=dish.thumbnail; img.alt=''; img.width=320; img.height=320;
       const info=document.createElement('div'); const name=document.createElement('strong'); name.textContent=dish.name; const price=document.createElement('small'); price.textContent=money(dish.price * qty); info.append(name,price);
       const quantity=document.createElement('div'); quantity.className='quantity-control';
       const minus=document.createElement('button'); minus.type='button'; minus.textContent='−'; minus.setAttribute('aria-label',`Decrease ${dish.name} quantity`); minus.addEventListener('click',()=>changeQuantity(dish.id,-1));
@@ -159,6 +160,9 @@
   $('dish-prev').addEventListener('click',()=>selectDish(active-1)); $('dish-next').addEventListener('click',()=>selectDish(active+1));
   document.addEventListener('keydown', event => { if (event.key==='Escape' && drawer.classList.contains('open')) closeCart(); if (drawer.classList.contains('open') || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '')) return; if (event.key==='ArrowRight' || event.key==='ArrowLeft') { event.preventDefault(); selectDish(active+(event.key==='ArrowRight'?1:-1)); } });
   $('plate-scene').addEventListener('wheel',event=>{ if(Math.abs(event.deltaY)<8 || Date.now()-lastWheel<700)return; event.preventDefault(); lastWheel=Date.now(); selectDish(active+(event.deltaY>0?1:-1)); },{passive:false});
+  let touchStartX=0, touchStartY=0;
+  $('plate-scene').addEventListener('touchstart',event=>{touchStartX=event.changedTouches[0].screenX;touchStartY=event.changedTouches[0].screenY;},{passive:true});
+  $('plate-scene').addEventListener('touchend',event=>{const dx=event.changedTouches[0].screenX-touchStartX,dy=event.changedTouches[0].screenY-touchStartY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4)selectDish(active+(dx<0?1:-1));},{passive:true});
   $('add-featured').addEventListener('click',()=>{ changeQuantity(dishes[active].id,1); flyToCart(); $('live-message').textContent=`${dishes[active].name} added to order`; });
   const menuToggle = $('order-menu-toggle');
   menuToggle?.addEventListener('click', () => { const open = menuToggle.getAttribute('aria-expanded') !== 'true'; menuToggle.setAttribute('aria-expanded', String(open)); $('order-site-nav').classList.toggle('is-open', open); });

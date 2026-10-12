@@ -43,17 +43,18 @@
       }
       const article = make('article', 'menu-item');
       const imagePath = (window.DEBUT_ASSET_PREFIX || '') + 'images/generated/' + section.id + '-' + String(itemIndex + 1).padStart(2, '0') + '.webp';
+      const thumbnailPath = (window.DEBUT_ASSET_PREFIX || '') + 'images/generated/thumbs/' + section.id + '-' + String(itemIndex + 1).padStart(2, '0') + '.webp';
       const entryIndex = allEntries.push({ item, imagePath }) - 1;
       const visual = make('button', 'item-visual');
       visual.type = 'button';
       visual.setAttribute('aria-label', 'View illustration of ' + item.name);
       const thumbnail = make('img', 'item-image');
-      thumbnail.src = imagePath;
+      thumbnail.src = thumbnailPath;
       thumbnail.alt = '';
       thumbnail.loading = 'lazy';
       thumbnail.decoding = 'async';
-      thumbnail.width = 768;
-      thumbnail.height = 768;
+      thumbnail.width = 320;
+      thumbnail.height = 320;
       visual.append(thumbnail, make('span', 'visual-action', 'VIEW DISH ↗'));
       visual.addEventListener('click', () => openViewer(entryIndex));
       article.append(visual);
