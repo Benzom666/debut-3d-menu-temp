@@ -23,6 +23,8 @@ Ordering goes to the verified Clover ordering URL. Staff login still opens the o
 
 The food and drink visuals are illustrations, not rotatable 3D assets or augmented reality models. The print PDF QR opens the `/menu/` route on the temporary public domain. Actual item presentation may vary.
 
+A [replacement reservation service](reservation-api/README.md) is under local development. It includes a private staff dashboard and D1-backed API, but the public site does not collect reservations through it until staff identities, notifications, and hosted storage are configured and verified.
+
 ## Edit and build
 
 Update `build_full_site.py` for website copy and events, `dist/site.css` for the shared visual system, and `menu-page.html` and `menu.json` for the menu. Run:
