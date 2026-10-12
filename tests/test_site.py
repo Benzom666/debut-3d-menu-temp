@@ -29,6 +29,10 @@ class DebutSiteTests(unittest.TestCase):
         for href in ("menu/", "events/", "restaurant/", "book/", "contact/"):
             self.assertGreater(page.locator(f'a[href="{href}"]').count(), 0, href)
         self.assertEqual(page.get_by_role("link", name="Order online", exact=False).first.get_attribute("href"), "order/")
+        restaurant = self.open_page("restaurant/index.html")
+        restaurant_photo = restaurant.locator(".interior-hero-image img").get_attribute("src").split("/")[-1]
+        self.assertIn(restaurant_photo, page.locator(".hero-photograph").evaluate("el => getComputedStyle(el).backgroundImage"))
+        restaurant.close()
         self.assertTrue(page.get_by_role("link", name="Staff login", exact=False).first.get_attribute("href").startswith("https://debutbar.ca/admin"))
         page.close()
 

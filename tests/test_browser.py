@@ -57,6 +57,19 @@ class BrowserMenuTests(unittest.TestCase):
         self.assertFalse(page.get_by_role("dialog").is_visible())
         page.close()
 
+    def test_menu_hero_plate_rotates_and_can_cycle_dishes_on_mobile(self):
+        page = self.browser.new_page(viewport={"width": 390, "height": 844})
+        page.set_default_timeout(2000)
+        page.goto((ROOT / "dist" / "menu" / "index.html").as_uri())
+        plate = page.locator("#menu-featured-image")
+        self.assertIn("appetizers-01.webp", plate.get_attribute("src"))
+        self.assertIn("menu-plate-turn", plate.evaluate("image => getComputedStyle(image).animationName"))
+        page.get_by_role("button", name="Next featured dish").click()
+        self.assertIn("Chicken Quesadilla", page.locator("#menu-featured-name").inner_text())
+        self.assertIn("appetizers-02.webp", plate.get_attribute("src"))
+        self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
+        page.close()
+
     def test_scan_code_points_to_public_menu(self):
         page = self.browser.new_page()
         page.goto((ROOT / "dist" / "menu" / "index.html").as_uri())
