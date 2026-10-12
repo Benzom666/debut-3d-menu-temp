@@ -16,6 +16,7 @@ Open `http://localhost:8000/`. The temporary public address is `https://benzom66
 - `/restaurant/` — venue and experience
 - `/menu/` — 92 illustrated menu items, section navigation, item viewer, and print menu
 - `/events/` — October 2026 dates and weekly programming; expired dates hide automatically
+- `/private-events/` — semi-private and full venue booking options with a direct inquiry
 - `/book/` — direct phone and email reservation requests
 - `/contact/` — address, directions, phone, email, and social links
 
@@ -42,4 +43,4 @@ Install dependencies from `requirements.txt` and Playwright Chromium for PDF exp
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The menu was transcribed from `MENU DEBUT 2.pdf`. Some source drinks have no listed price, and promotional offers should be checked against the restaurant before long term publication. October 2026 event details came from the original [Début events page](https://debutbar.ca/events) on October 12, 2026.
+The menu was transcribed from `MENU DEBUT 2.pdf`. Some source drinks have no listed price, and promotional offers should be checked against the restaurant before long term publication. October 2026 event details came from the original [Début events page](https://debutbar.ca/events) on October 12, 2026. The dated October artwork and list retire on November 1 in Barrie time, leaving weekly programming and a link to current announcements. Private event formats came from the original [restaurant page](https://debutbar.ca/about).

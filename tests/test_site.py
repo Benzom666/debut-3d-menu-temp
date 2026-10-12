@@ -46,6 +46,37 @@ class DebutSiteTests(unittest.TestCase):
         self.assertGreater(page.locator(".events-hero-image").evaluate("element => element.getBoundingClientRect().height"), 500)
         page.close()
 
+    def test_october_event_artwork_retires_after_month_in_barrie(self):
+        page = self.browser.new_page(viewport={"width": 390, "height": 900})
+        page.add_init_script("""(() => {
+          const ActualDate = Date;
+          window.Date = class extends ActualDate {
+            constructor(...args) { super(...(args.length ? args : ['2026-11-02T15:00:00Z'])); }
+            static now() { return new ActualDate('2026-11-02T15:00:00Z').getTime(); }
+          };
+        })()""")
+        page.goto((ROOT / "events" / "index.html").as_uri())
+        self.assertFalse(page.locator(".event-poster").is_visible())
+        self.assertFalse(page.locator("#dates").is_visible())
+        self.assertFalse(page.locator(".event-banner").is_visible())
+        self.assertTrue(page.get_by_role("link", name="Latest on Instagram", exact=False).is_visible())
+        self.assertTrue(page.locator(".weekly-program").is_visible())
+        page.close()
+
+    def test_october_events_remain_on_october_31_in_barrie(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 900})
+        page.add_init_script("""(() => {
+          const ActualDate = Date;
+          window.Date = class extends ActualDate {
+            constructor(...args) { super(...(args.length ? args : ['2026-11-01T02:00:00Z'])); }
+            static now() { return new ActualDate('2026-11-01T02:00:00Z').getTime(); }
+          };
+        })()""")
+        page.goto((ROOT / "events" / "index.html").as_uri())
+        self.assertTrue(page.locator(".event-poster").is_visible())
+        self.assertTrue(page.locator(".event-row[data-date='2026-10-31']").is_visible())
+        page.close()
+
     def test_booking_uses_direct_contact_until_reservations_are_private(self):
         page = self.open_page("book/index.html")
         self.assertEqual(page.locator('a[href="https://debutbar.ca/book"]').count(), 0)
@@ -75,6 +106,20 @@ class DebutSiteTests(unittest.TestCase):
             self.assertGreater(header.evaluate("image => image.naturalWidth"), 0)
             self.assertGreater(footer.evaluate("image => image.naturalWidth"), 0)
             page.close()
+
+    def test_private_events_have_a_dedicated_inquiry_journey(self):
+        home = self.open_page()
+        self.assertGreater(home.locator('a[href="private-events/"]').count(), 0)
+        home.close()
+        page = self.open_page("private-events/index.html", width=390)
+        text = page.locator("main").inner_text()
+        self.assertIn("Semi-private", text)
+        self.assertIn("Full venue", text)
+        self.assertIn("custom menus", text.lower())
+        inquiry = page.get_by_role("link", name="Ask about your event", exact=False)
+        self.assertTrue(inquiry.get_attribute("href").startswith("mailto:info@debutbar.ca?subject="))
+        self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
+        page.close()
 
 
 if __name__ == "__main__":
