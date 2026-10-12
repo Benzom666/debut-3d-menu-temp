@@ -12,16 +12,16 @@ Open `http://localhost:8000/`. The temporary public address is `https://benzom66
 
 ## Pages and live services
 
-- `/` — interactive ordering homepage with the complete menu list beside a rotating dish, plus restaurant and events content
+- `/` — restaurant landing page with venue photography, booking, menu, and events links
 - `/restaurant/` — venue and experience
-- `/menu/` — 92 menu items with AI-generated overhead imagery, section navigation, item viewer, and print menu
-- `/order/` — AI-imaged pickup request experience with spinning dishes, ingredient callouts for selected dishes, a saved cart, estimated HST, and an email draft checkout
+- `/menu/` — 92 menu items with AI-generated overhead imagery, a rotating featured plate, section navigation, item viewer, and print menu
+- `/order/` — pickup request experience with spinning dishes, ingredient callouts for selected dishes, a saved cart, estimated HST, and Formspree submission
 - `/events/` — October 2026 dates and weekly programming; expired dates hide automatically
 - `/private-events/` — semi-private and full venue booking options with a direct inquiry
-- `/book/` — direct phone and email reservation requests
+- `/book/` — reservation requests through Formspree, with direct phone and email options
 - `/contact/` — address, directions, phone, email, and social links
 
-The existing Order online links go to the verified Clover ordering URL. The new `/order/` page prepares an email request to `info@debutbar.ca`; sending it and receiving restaurant confirmation are required before pickup is arranged. It does not process payment or submit an order to Clover. Staff login still opens the original admin at `debutbar.ca/admin`. The booking page uses phone and email because the original reservation data endpoint needs server-side access control before directing new guests to that form. No reservation data is collected by this static site.
+Order online links open `/order/`. Pickup and reservation requests submit to the existing Formspree form. If a pickup request cannot be sent, the cart stays intact and an email fallback is shown. A request is not confirmed until the team replies, and no payment is taken on the site. Staff login still opens the original admin at `debutbar.ca/admin`.
 
 The 92 food and drink visuals are AI-generated overhead images with transparent backgrounds. Full-resolution source PNGs are kept locally in `assets/generated-originals/` (excluded from Git); the committed, optimized WebP copies used throughout the site are in `dist/images/generated/`. The item viewer does not claim these are photographs of actual Début servings or offer AR. The print PDF QR opens the `/menu/` route on the temporary public domain. Actual item presentation may vary.
 
@@ -29,7 +29,7 @@ A [replacement reservation service](reservation-api/README.md) is under local de
 
 ## Edit and build
 
-Update `build_full_site.py` for website copy and events, `dist/site.css` for the shared visual system, `menu-page.html` and `menu.json` for the menu, and `order-page.html`, `dist/order.css`, and `dist/order.js` for the pickup page. Run:
+Update `build_full_site.py` for website copy, events, and the shared header/navigation, `dist/site.css` for the shared visual system, `menu-page.html` and `menu.json` for the menu, and `order-page.html`, `dist/order.css`, and `dist/order.js` for the pickup page. The menu and pickup templates contain a `SITE_HEADER` placeholder filled by the shared builder. Run:
 
 ```sh
 python3 build.py

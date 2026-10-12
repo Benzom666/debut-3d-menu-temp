@@ -11,16 +11,17 @@ INSTAGRAM = "https://www.instagram.com/debutbar.ca/"
 FACEBOOK = "https://www.facebook.com/profile.php?id=61581988111686"
 
 
-def nav(prefix="", active=""):
-    links = [("Restaurant", "restaurant/"), ("Menu", "menu/"), ("Pickup", "order/"), ("Events", "events/"), ("Contact", "contact/")]
+def nav(prefix="", active="", cart=False):
+    links = [("Home", "index.html"), ("Restaurant", "restaurant/"), ("Menu", "menu/"), ("Pickup", "order/"), ("Events", "events/"), ("Contact", "contact/"), ("Book a table", "book/")]
     items = "".join(
-        f'<a href="{prefix}{href}"{(" aria-current=\"page\"" if active == label else "")}>{label}</a>'
+        f'<a href="{prefix}{href}"{(" class=\"nav-book\"" if label == "Book a table" else "")}{(" aria-current=\"page\"" if active == label else "")}>{label}</a>'
         for label, href in links
     )
+    cart_button = '<button id="open-cart" class="cart-trigger" type="button" aria-label="View order"><span>Your order</span><span id="cart-count" class="cart-count">0</span><span aria-hidden="true">↗</span></button>' if cart else ''
     return f'''<header class="global-header" id="site-top">
       <a class="global-brand" href="{prefix}index.html" aria-label="Début home"><span class="brand-logo-mark"><img src="{prefix}media/debut-logo.png" alt="" width="3785" height="3706"></span><span>DÉBUT<small>BAR & RESTAURANT</small></span></a>
-      <nav class="global-nav" id="global-nav" aria-label="Main navigation">{items}<a class="mobile-order" href="{prefix}order/">Order online ↗</a></nav>
-      <div class="header-actions"><a class="order-link" href="{prefix}order/">Order online ↗</a><a class="reserve-link" href="{prefix}book/">Book a table <span aria-hidden="true">↗</span></a></div>
+      <nav class="global-nav" id="global-nav" aria-label="Main navigation">{items}</nav>
+      <div class="header-actions">{cart_button}<a class="order-link" href="{prefix}order/">Order online ↗</a><a class="reserve-link" href="{prefix}book/"{(" aria-current=\"page\"" if active == "Book a table" else "")}>Book a table <span aria-hidden="true">↗</span></a></div>
       <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="global-nav"><span></span><span></span></button>
     </header>'''
 
@@ -45,7 +46,7 @@ def page(title, description, body, route="", kind=""):
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="{prefix}site.css"><script defer src="{prefix}site.js"></script>
     </head><body class="full-site {kind}"><a class="skip-link" href="#main">Skip to content</a>
-    {nav(prefix, title if title in ("Restaurant", "Menu", "Events", "Contact") else "")}
+    {nav(prefix, "Home" if not route else ("Book a table" if route == "book" else title if title in ("Restaurant", "Events", "Contact") else ""))}
     <main id="main">{body}</main>{footer(prefix)}</body></html>''')
 
 
@@ -124,7 +125,7 @@ def build_menu():
     source = source.replace('src="scan-menu-qr.png"', 'src="../scan-menu-qr.png"')
     source = source.replace('<body>', '<body class="menu-page">')
     source = re.sub(r'<link rel="icon" type="image/svg\+xml" href="data:image/svg\+xml,[^"]+">', '<link rel="icon" type="image/png" href="../media/debut-logo.png">', source, count=1)
-    source = re.sub(r'<header class="topbar">.*?</header>', nav("../", "Menu"), source, count=1, flags=re.S)
+    source = source.replace('<!-- SITE_HEADER -->', nav("../", "Menu"), 1)
     source = source.replace('</main>', '</main>' + footer("../"), 1)
     source = source.replace('href="https://benzom666.github.io/debut-3d-menu-temp/#appetizers"', 'href="https://benzom666.github.io/debut-3d-menu-temp/menu/#appetizers"')
     target = DIST / "menu" / "index.html"
@@ -149,6 +150,8 @@ def main():
     order = DIST / "order"
     order.mkdir(exist_ok=True)
     order_html = (ROOT / "order-page.html").read_text(encoding="utf-8")
+    order_html = order_html.replace('<!-- SITE_HEADER -->', nav("../", "Pickup", cart=True), 1)
+    order_html = order_html.replace('</head>', '<script defer src="../site.js"></script></head>', 1)
     order_html = order_html.replace("</main>", "</main>" + footer("../"), 1)
     (order / "index.html").write_text(order_html, encoding="utf-8")
     print("Built homepage, restaurant, private events, events, booking, contact, menu, and pickup")

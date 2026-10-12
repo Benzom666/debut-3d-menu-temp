@@ -36,6 +36,24 @@ class DebutSiteTests(unittest.TestCase):
         self.assertTrue(page.get_by_role("link", name="Staff login", exact=False).first.get_attribute("href").startswith("https://debutbar.ca/admin"))
         page.close()
 
+    def test_every_route_uses_the_same_header_and_mobile_navigation(self):
+        routes = ("index.html", "restaurant/index.html", "menu/index.html", "order/index.html", "events/index.html", "private-events/index.html", "book/index.html", "contact/index.html")
+        expected = ["Home", "Restaurant", "Menu", "Pickup", "Events", "Contact", "Book a table"]
+        for route in routes:
+            page = self.open_page(route, width=390)
+            self.assertEqual(page.locator("header.global-header").count(), 1, route)
+            toggle = page.get_by_role("button", name="Open menu")
+            toggle.click()
+            links = page.locator("#global-nav a")
+            self.assertEqual([text.strip() for text in links.all_text_contents()], expected, route)
+            self.assertTrue(links.first.is_visible(), route)
+            page.keyboard.press("Escape")
+            self.assertFalse(links.first.is_visible(), route)
+            if route == "order/index.html":
+                page.get_by_role("button", name="View order").click()
+                self.assertEqual(page.locator("#cart-drawer").get_attribute("aria-hidden"), "false")
+            page.close()
+
     def test_events_have_current_dates_and_reservation_action(self):
         page = self.open_page("events/index.html")
         self.assertTrue(page.get_by_text("October 2026", exact=False).first.is_visible())
