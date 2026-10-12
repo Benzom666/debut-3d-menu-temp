@@ -66,3 +66,7 @@
 .order-status[data-kind="error"]{color:#f5bb9e}
 .email-fallback{display:inline-block;margin-top:12px;color:var(--color-gold);font-size:12px;font-weight:700;text-decoration:underline;text-underline-offset:4px}
 .order-status[hidden],.email-fallback[hidden],#request-result[hidden],#order-form[hidden]{display:none}
+
+/* Keep the cart in view so the dish flight has a visible destination. */
+.order-page .global-header{position:sticky;top:0;z-index:70}
+.order-page .fly-dish{transition:none;object-fit:contain}

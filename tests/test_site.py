@@ -54,6 +54,17 @@ class DebutSiteTests(unittest.TestCase):
                 self.assertEqual(page.locator("#cart-drawer").get_attribute("aria-hidden"), "false")
             page.close()
 
+    def test_every_route_uses_the_brand_favicon(self):
+        routes = ("index.html", "restaurant/index.html", "menu/index.html", "order/index.html", "events/index.html", "private-events/index.html", "book/index.html", "contact/index.html")
+        for route in routes:
+            page = self.open_page(route)
+            icon = page.locator('link[rel="icon"]')
+            self.assertEqual(icon.count(), 1, route)
+            self.assertTrue(icon.get_attribute("href").endswith("favicon.png"), route)
+            self.assertEqual(icon.evaluate("el => new URL(el.href).pathname.split('/').pop()"), "favicon.png", route)
+            page.close()
+        self.assertLess((ROOT / "favicon.png").stat().st_size, 50000)
+
     def test_events_have_current_dates_and_reservation_action(self):
         page = self.open_page("events/index.html")
         self.assertTrue(page.get_by_text("October 2026", exact=False).first.is_visible())

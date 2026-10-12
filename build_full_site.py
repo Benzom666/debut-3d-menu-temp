@@ -2,7 +2,6 @@
 
 from pathlib import Path
 from textwrap import dedent
-import re
 
 
 ROOT = Path(__file__).resolve().parent
@@ -41,7 +40,8 @@ def page(title, description, body, route="", kind=""):
       <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
       <meta name="theme-color" content="#121412"><meta name="description" content="{description}">
       <title>{title} | DÉBUT Bar & Restaurant</title>
-      <link rel="icon" type="image/png" href="{prefix}media/debut-logo.png">
+      <link rel="icon" type="image/png" href="{prefix}favicon.png">
+      <link rel="apple-touch-icon" href="{prefix}apple-touch-icon.png">
       <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="{prefix}site.css"><script defer src="{prefix}site.js"></script>
@@ -124,7 +124,8 @@ def build_menu():
     source = source.replace('src="images/generated/appetizers-01.webp"', 'src="../images/generated/appetizers-01.webp"')
     source = source.replace('src="scan-menu-qr.png"', 'src="../scan-menu-qr.png"')
     source = source.replace('<body>', '<body class="menu-page">')
-    source = re.sub(r'<link rel="icon" type="image/svg\+xml" href="data:image/svg\+xml,[^"]+">', '<link rel="icon" type="image/png" href="../media/debut-logo.png">', source, count=1)
+    source = source.replace('href="favicon.png"', 'href="../favicon.png"', 1)
+    source = source.replace('href="apple-touch-icon.png"', 'href="../apple-touch-icon.png"', 1)
     source = source.replace('<!-- SITE_HEADER -->', nav("../", "Menu"), 1)
     source = source.replace('</main>', '</main>' + footer("../"), 1)
     source = source.replace('href="https://benzom666.github.io/debut-3d-menu-temp/#appetizers"', 'href="https://benzom666.github.io/debut-3d-menu-temp/menu/#appetizers"')

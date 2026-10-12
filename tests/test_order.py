@@ -56,6 +56,20 @@ class OrderingExperienceTests(unittest.TestCase):
         self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
         page.close()
 
+    def test_add_to_cart_flight_stays_visible_on_mobile(self):
+        page = self.browser.new_page(viewport={"width": 390, "height": 844})
+        page.goto((ROOT / "dist" / "order" / "index.html").as_uri())
+        page.get_by_role("button", name="Add Butter Chicken Poutine to order").click()
+        cart = page.get_by_role("button", name="View order").bounding_box()
+        flight = page.locator(".fly-dish").bounding_box()
+        self.assertGreaterEqual(cart["y"], 0)
+        self.assertGreaterEqual(flight["y"] + flight["height"], 0)
+        self.assertLess(flight["y"], 844)
+        page.wait_for_timeout(1000)
+        self.assertEqual(page.locator(".fly-dish").count(), 0)
+        self.assertEqual(page.locator("#cart-count").inner_text(), "1")
+        page.close()
+
     def test_checkout_is_request_and_requires_restaurant_confirmation(self):
         page = self.browser.new_page()
         page.goto((ROOT / "dist" / "order" / "index.html").as_uri())
