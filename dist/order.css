@@ -19,3 +19,44 @@
 @media(max-width:800px){.order-header{position:relative}.order-header nav{display:none;position:absolute;left:0;right:0;top:100%;z-index:55;background:var(--color-bg);padding:15px 20px 25px;border-bottom:1px solid var(--color-line);box-shadow:0 20px 30px rgba(0,0,0,.3)}.order-header nav.is-open{display:flex;flex-direction:column;gap:0}.order-header nav a{padding:12px 0;border-bottom:1px solid var(--color-line)}.order-menu-toggle{display:block;margin-left:auto}.order-stage{grid-template-columns:1fr 1.3fr}.dish-info{grid-column:1/-1;max-width:700px}.dish-browser{grid-column:1/-1}.order-header .cart-trigger{margin-left:0}}
 @media(max-width:700px){.order-stage{display:flex;flex-direction:column;padding:32px 20px 70px}.dish-browser{width:100%;align-self:auto;border-top:1px solid var(--color-line);padding-top:25px;margin-top:30px}.dish-rail{display:block;max-height:320px}.dish-rail button{grid-template-columns:55px minmax(0,1fr);height:auto}.dish-rail img{width:55px;height:55px}.dish-rail strong{font-size:15px}.browser-heading h2{font-size:32px}.featured-image{width:112%}.purchase-row{display:flex}.purchase-row button{margin-top:0}}
 @media(max-width:800px){.home-page .global-header .reserve-link,.home-page .global-header .order-link{display:none}.home-page .global-header .header-actions{margin-left:auto}.home-page .global-header .cart-trigger{padding:4px}}
+
+/* Keep the image square as it scales; the HTML dimensions reserve its aspect ratio. */
+.featured-image{height:auto;aspect-ratio:1/1;object-fit:contain}
+.plate-scene{min-width:0;touch-action:pan-y}
+.dish-rail button,.category-filters button{min-height:44px}
+.quantity-control button,.cart-head>button{min-width:44px;min-height:44px}
+.cart-bottom{padding-bottom:max(25px,env(safe-area-inset-bottom))}
+@media(max-width:1100px){
+  .plate-scene{min-height:0;aspect-ratio:1/1}
+  .featured-image{width:min(100%,540px)}
+}
+@media(max-width:700px){
+  .order-stage{padding-top:20px;padding-bottom:55px}
+  .stage-intro h1{font-size:clamp(48px,13vw,64px);margin:9px 0 12px}
+  .stage-intro>p:not(.order-kicker){line-height:1.55;margin:0}
+  .stage-pager{margin-top:16px}
+  .plate-scene{width:100%;height:auto;min-height:0;aspect-ratio:1/1;margin:8px auto 14px}
+  .featured-image{width:100%;max-width:390px;height:auto}
+  .plate-ring{width:95%}
+  .plate-hint{display:none}
+  .dish-info h2{font-size:clamp(34px,10vw,46px);margin:8px 0 14px}
+  .featured-description{line-height:1.6}
+  .featured-tags{margin:12px 0}
+  .purchase-row{padding-top:16px}
+  .dish-browser{margin-top:20px}
+  .category-filters{max-height:none}
+  .category-filters button{font-size:10px;padding:10px 12px}
+  .dish-rail{max-height:340px}
+  .dish-rail button{min-height:70px}
+  .cart-trigger,.order-menu-toggle{min-width:44px;min-height:44px;justify-content:center}
+  .cart-trigger>span[aria-hidden]{display:none}
+  #order-form input,#order-form select,#order-form textarea{min-height:44px;font-size:16px}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:360px){
+  .order-topline{font-size:7px;letter-spacing:.12em}
+  .purchase-row{gap:10px}
+  .purchase-row button{padding:16px 12px;font-size:9px}
+  .cart-item{grid-template-columns:45px minmax(0,1fr)}
+  .cart-item .quantity-control{grid-column:2;justify-self:end}
+}
