@@ -150,10 +150,24 @@
   }
   function flyToCart() {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const start=image.getBoundingClientRect(), end=cartButton.getBoundingClientRect();
-    const clone=image.cloneNode(); clone.className='fly-dish'; Object.assign(clone.style,{left:`${start.left+start.width*.32}px`,top:`${start.top+start.height*.32}px`,width:`${start.width*.36}px`,height:`${start.height*.36}px`}); document.body.append(clone);
-    requestAnimationFrame(() => { clone.style.transform=`translate(${end.left-start.left-start.width*.32}px,${end.top-start.top-start.height*.32-90}px) scale(.06) rotate(50deg)`; clone.style.opacity='0'; });
-    setTimeout(()=>clone.remove(),850);
+    const plate=image.getBoundingClientRect();
+    const visibleHeight=Math.max(0,Math.min(plate.bottom,innerHeight)-Math.max(plate.top,0));
+    const start=visibleHeight>=Math.min(160,plate.height*.4)?plate:$('add-featured').getBoundingClientRect();
+    const end=cartButton.getBoundingClientRect();
+    const size=Math.min(190,Math.max(96,start.width*.36));
+    const x=start.left+start.width/2-size/2,y=start.top+start.height/2-size/2;
+    const dx=end.left+end.width/2-(x+size/2),dy=end.top+end.height/2-(y+size/2);
+    const clone=image.cloneNode();
+    clone.removeAttribute('id');
+    clone.className='fly-dish';
+    Object.assign(clone.style,{left:`${x}px`,top:`${y}px`,width:`${size}px`,height:`${size}px`});
+    document.body.append(clone);
+    const flight=clone.animate([
+      {transform:'translate(0,0) scale(1) rotate(0deg)',opacity:1},
+      {transform:`translate(${dx*.48}px,${dy*.5-75}px) scale(.7) rotate(20deg)`,opacity:1,offset:.52},
+      {transform:`translate(${dx}px,${dy}px) scale(.14) rotate(50deg)`,opacity:0}
+    ],{duration:850,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
+    flight.onfinish=()=>{clone.remove();cartButton.animate([{transform:'scale(1)'},{transform:'scale(1.18)'},{transform:'scale(1)'}],{duration:250,easing:'ease-out'});};
   }
   function openCart() { previousFocus=document.activeElement; backdrop.hidden=false; drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; $('close-cart').focus(); }
   function closeCart() { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); backdrop.hidden=true; document.body.style.overflow=''; previousFocus?.focus(); }
