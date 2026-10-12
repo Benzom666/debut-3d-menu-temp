@@ -42,7 +42,7 @@
         lastGroup = item.group;
       }
       const article = make('article', 'menu-item');
-      const imagePath = (window.DEBUT_ASSET_PREFIX || '') + 'images/' + section.id + '-' + String(itemIndex + 1).padStart(2, '0') + '.webp';
+      const imagePath = (window.DEBUT_ASSET_PREFIX || '') + 'images/generated/' + section.id + '-' + String(itemIndex + 1).padStart(2, '0') + '.webp';
       const entryIndex = allEntries.push({ item, imagePath }) - 1;
       const visual = make('button', 'item-visual');
       visual.type = 'button';

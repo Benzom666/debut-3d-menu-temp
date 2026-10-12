@@ -8,3 +8,5 @@ image_sources.json
 *.tar.gz
 *.pindex.tmp
 debutbar-*.png
+# Keep full-resolution generated masters locally; deploy optimized WebP assets.
+assets/generated-originals/
