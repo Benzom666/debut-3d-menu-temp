@@ -45,7 +45,7 @@
       const entryIndex = allEntries.push({ item, imagePath }) - 1;
       const visual = make('button', 'item-visual');
       visual.type = 'button';
-      visual.setAttribute('aria-label', 'View 3D illustration of ' + item.name);
+      visual.setAttribute('aria-label', 'View illustration of ' + item.name);
       const thumbnail = make('img', 'item-image');
       thumbnail.src = imagePath;
       thumbnail.alt = '';
@@ -53,7 +53,7 @@
       thumbnail.decoding = 'async';
       thumbnail.width = 768;
       thumbnail.height = 768;
-      visual.append(thumbnail, make('span', 'visual-action', 'VIEW 3D IMAGE ↗'));
+      visual.append(thumbnail, make('span', 'visual-action', 'VIEW DISH ↗'));
       visual.addEventListener('click', () => openViewer(entryIndex));
       article.append(visual);
       const top = make('div', 'item-top');
@@ -90,7 +90,7 @@
     viewerIndex = (index + allEntries.length) % allEntries.length;
     const entry = allEntries[viewerIndex];
     document.getElementById('viewer-image').src = entry.imagePath;
-    document.getElementById('viewer-image').alt = 'Illustrative 3D render of ' + entry.item.name;
+    document.getElementById('viewer-image').alt = 'Illustration of ' + entry.item.name;
     document.getElementById('viewer-name').textContent = entry.item.name + (entry.item.price !== undefined ? ' · ' + money(entry.item.price) : '');
     document.getElementById('viewer-description').textContent = entry.item.description || '';
     document.getElementById('viewer-count').textContent = String(viewerIndex + 1).padStart(2, '0') + ' / ' + String(allEntries.length).padStart(2, '0');
