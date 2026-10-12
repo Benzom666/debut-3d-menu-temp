@@ -27,7 +27,7 @@ class PrintMenuTests(unittest.TestCase):
             subprocess.check_call(["pdftoppm", "-f", "1", "-l", "1", "-scale-to", "1800", "-png", str(PDF), prefix], stdout=subprocess.DEVNULL)
             image = Image.open(prefix + "-1.png")
             codes = zxingcpp.read_barcodes(image)
-            self.assertIn("https://benzom666.github.io/debut-3d-menu-temp/#appetizers", [code.text for code in codes])
+            self.assertIn("https://benzom666.github.io/debut-3d-menu-temp/menu/#appetizers", [code.text for code in codes])
 
 
 if __name__ == "__main__":

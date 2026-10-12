@@ -1,0 +1,143 @@
+"""Build the public Début pages around the existing illustrated menu."""
+
+from pathlib import Path
+from textwrap import dedent
+import re
+
+
+ROOT = Path(__file__).resolve().parent
+DIST = ROOT / "dist"
+CLOVER = "https://www.clover.com/online-ordering/debut-bar-and-restaurant-barrie"
+INSTAGRAM = "https://www.instagram.com/debutbar.ca/"
+FACEBOOK = "https://www.facebook.com/profile.php?id=61581988111686"
+
+
+def nav(prefix="", active=""):
+    links = [("Restaurant", "restaurant/"), ("Menu", "menu/"), ("Events", "events/"), ("Contact", "contact/")]
+    items = "".join(
+        f'<a href="{prefix}{href}"{(" aria-current=\"page\"" if active == label else "")}>{label}</a>'
+        for label, href in links
+    )
+    return f'''<header class="global-header" id="site-top">
+      <a class="global-brand" href="{prefix}index.html" aria-label="Début home"><span class="brand-monogram">D</span><span>DÉBUT<small>BAR & RESTAURANT</small></span></a>
+      <nav class="global-nav" id="global-nav" aria-label="Main navigation">{items}<a class="mobile-order" href="{CLOVER}" target="_blank" rel="noopener noreferrer">Order online ↗</a></nav>
+      <div class="header-actions"><a class="order-link" href="{CLOVER}" target="_blank" rel="noopener noreferrer">Order online ↗</a><a class="reserve-link" href="{prefix}book/">Book a table <span aria-hidden="true">↗</span></a></div>
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="global-nav"><span></span><span></span></button>
+    </header>'''
+
+
+def footer(prefix=""):
+    return f'''<footer class="global-footer">
+      <div class="footer-top"><div><p class="section-kicker">THE NEXT CHAPTER STARTS HERE</p><h2>Make tonight<br><em>something.</em></h2></div><a class="footer-book" href="{prefix}book/">Reserve your table <span aria-hidden="true">↗</span></a></div>
+      <div class="footer-grid"><div><a class="footer-logo" href="{prefix}index.html">DÉBUT<span>✦</span></a><p>10 Dunlop St E<br>Barrie, ON L4M 1A3</p></div><div><span class="footer-label">EXPLORE</span><a href="{prefix}restaurant/">Restaurant</a><a href="{prefix}menu/">Menu</a><a href="{prefix}events/">Events</a><a href="{prefix}contact/">Contact</a></div><div><span class="footer-label">CONNECT</span><a href="mailto:info@debutbar.ca">info@debutbar.ca</a><a href="tel:+19428833288">+1 942 883 3288</a><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="{FACEBOOK}" target="_blank" rel="noopener noreferrer">Facebook ↗</a></div><div><span class="footer-label">VISIT</span><a href="https://www.google.com/maps/search/?api=1&query=10+Dunlop+St+E%2C+Barrie%2C+ON+L4M+1A3" target="_blank" rel="noopener noreferrer">Get directions ↗</a><a href="{CLOVER}" target="_blank" rel="noopener noreferrer">Order online ↗</a><a href="https://debutbar.ca/admin" target="_blank" rel="noopener noreferrer">Staff login ↗</a></div></div>
+      <div class="footer-bottom"><span>© DÉBUT BAR & RESTAURANT</span><span>BARRIE, ONTARIO · CANADA</span><a href="#site-top">BACK TO TOP ↑</a></div>
+    </footer>'''
+
+
+def page(title, description, body, route="", kind=""):
+    prefix = "../" if route else ""
+    return dedent(f'''<!doctype html>
+    <html lang="en"><head>
+      <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="theme-color" content="#121412"><meta name="description" content="{description}">
+      <title>{title} | DÉBUT Bar & Restaurant</title>
+      <link rel="icon" type="image/svg+xml" href="{prefix}favicon.svg">
+      <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="{prefix}site.css"><script defer src="{prefix}site.js"></script>
+    </head><body class="full-site {kind}"><a class="skip-link" href="#main">Skip to content</a>
+    {nav(prefix, title if title in ("Restaurant", "Menu", "Events", "Contact") else "")}
+    <main id="main">{body}</main>{footer(prefix)}</body></html>''')
+
+
+home = '''
+<section class="home-hero" aria-labelledby="home-title"><div class="hero-photograph" role="img" aria-label="The illuminated arched entrance at Début Bar and Restaurant"></div><div class="home-hero-shade"></div><div class="home-hero-content"><p class="section-kicker"><span class="kicker-line"></span> DINNER · DRINKS · AFTER DARK</p><h1 id="home-title">The night<br><em>begins here.</em></h1><p>A little unexpected. Entirely unforgettable. Your place for dinner, cocktails and the kind of night that stays with you.</p><div class="hero-actions"><a class="button-gold" href="book/">Book a table <span>↗</span></a><a class="text-link" href="menu/">Explore the menu <span>↗</span></a></div></div><div class="hero-side-note">10 DUNLOP ST E · BARRIE, ONTARIO</div><div class="hero-bottom"><span>01 / 04 — THE DÉBUT EXPERIENCE</span><a href="#introduction">DISCOVER MORE ↓</a></div></section>
+<section class="intro-section section-frame" id="introduction"><div class="intro-heading"><p class="section-kicker">WELCOME TO DÉBUT</p><h2>Dinner is only<br>the <em>beginning.</em></h2></div><div class="intro-right"><span class="ornament">✦</span><p>Step out of the ordinary. Début brings together expressive food, a lively bar and an atmosphere that changes with the evening. Come for one more bite. Stay for one more song.</p><a class="arrow-link" href="restaurant/">Step inside <span>↗</span></a></div></section>
+<section class="experience-grid section-frame" aria-label="The Début experience"><div class="experience-photo photo-room"><img src="media/restaurant-room.webp" alt="Dining tables beneath illuminated ceiling details at Début" loading="lazy"><span class="photo-caption">01 — THE ROOM</span></div><div class="experience-photo photo-arch"><img src="media/restaurant-arch.webp" alt="Glowing arched passage inside Début" loading="lazy"><span class="photo-caption">02 — THE ARRIVAL</span></div><div class="experience-copy"><span class="serif-number">01.</span><p class="section-kicker">AN EVENING, YOUR WAY</p><h3>Come as you are.<br><em>Leave with a story.</em></h3><p>Settle in for dinner, meet over a cocktail, or find yourself staying for the music. There is always another reason to linger.</p></div></section>
+<section class="menu-feature section-frame"><div class="feature-copy"><p class="section-kicker">FOOD WORTH GATHERING FOR</p><h2>On the<br><em>table.</em></h2><p>Comforting favourites and bold flavours, made to share or keep all to yourself. Explore all 92 illustrated food and drink items.</p><a class="button-outline" href="menu/">Explore the menu <span>↗</span></a></div><div class="menu-feature-art"><img src="debut-food-hero.png" alt="Illustrated burger, butter chicken and shrimp pasta" loading="lazy"><span class="image-disclaimer">Menu imagery is illustrative.</span></div></section>
+<section class="events-feature section-frame"><div class="events-head"><div><p class="section-kicker">WHAT'S HAPPENING</p><h2>Good nights<br><em>are planned.</em></h2></div><a class="arrow-link" href="events/">All events <span>↗</span></a></div><div class="event-preview-grid"><a href="events/" class="event-preview" data-date="2026-10-14"><span class="event-date">14 <small>OCT</small></span><span><small>WEDNESDAY · 6–8 PM</small><strong>Wine Tasting</strong><em>with Trent Mayers</em></span><span class="event-arrow">↗</span></a><a href="events/" class="event-preview" data-date="2026-10-16"><span class="event-date">16 <small>OCT</small></span><span><small>FRIDAY · 6–9 PM</small><strong>Live Music</strong><em>with Jeff</em></span><span class="event-arrow">↗</span></a><a href="events/" class="event-preview" data-date="2026-10-31"><span class="event-date">31 <small>OCT</small></span><span><small>SATURDAY</small><strong>Halloween Party</strong><em>A night to remember</em></span><span class="event-arrow">↗</span></a><p class="no-event-previews" hidden>See the latest announcements on <a href="https://www.instagram.com/debutbar.ca/" target="_blank" rel="noopener noreferrer">Début's Instagram ↗</a></p></div></section>
+<section class="private-feature"><img src="media/restaurant-bar.webp" alt="The Début bar lit for the evening" loading="lazy"><div class="private-shade"></div><div class="private-content"><p class="section-kicker">MAKE IT YOURS</p><h2>Your moment.<br><em>Our place.</em></h2><p>Bring your people together at Début. Ask us about private celebrations and corporate events.</p><a class="button-gold" href="contact/">Plan an event <span>↗</span></a></div></section>
+'''
+
+restaurant = '''
+<section class="interior-hero"><div class="interior-hero-image"><img src="../media/restaurant-lounge.webp" alt="Début's textured lounge and intimate seating"></div><div class="interior-hero-copy"><p class="section-kicker">THE SPACE BETWEEN DINNER AND THE REST OF THE NIGHT</p><h1>Our<br><em>restaurant.</em></h1><p>In the heart of downtown Barrie, the mood shifts as the evening unfolds.</p></div><span class="hero-route">THE EXPERIENCE / 01</span></section>
+<section class="story-lead section-frame"><p class="section-kicker">MORE THAN A MEAL</p><h2>A place to arrive.<br><em>A reason to stay.</em></h2><p>Début is a modern dining and nightlife destination, bringing expressive food, considered drinks and a lively atmosphere together under one roof. Come for a dinner date, gather with friends or make an evening of it.</p></section>
+<section class="story-block section-frame"><div class="story-image tall"><img src="../media/restaurant-room.webp" alt="Début dining room with illuminated ceiling" loading="lazy"><span>01 / THE ROOM</span></div><div class="story-text"><span class="large-ordinal">01</span><p class="section-kicker">THE EXPERIENCE</p><h2>Find your<br><em>seat.</em></h2><p>Ambient light, intimate booths, open seating and a lounge give the room its own rhythm. The atmosphere evolves from early dinner to late-night energy.</p><a class="arrow-link" href="../book/">Reserve a table <span>↗</span></a></div></section>
+<section class="story-block story-block-reverse section-frame"><div class="story-image"><img src="../media/restaurant-bar.webp" alt="Début bar with illuminated counter and seating" loading="lazy"><span>02 / THE BAR</span></div><div class="story-text"><span class="large-ordinal">02</span><p class="section-kicker">BEHIND THE BAR</p><h2>Stay for<br><em>another round.</em></h2><p>Crafted cocktails, wine, beer and a bar that comes alive as the lights go down. Find your favourite on the drink menu.</p><a class="arrow-link" href="../menu/">View food & drinks <span>↗</span></a></div></section>
+<section class="restaurant-closing"><img src="../media/restaurant-arch.webp" alt="Début's signature illuminated arches" loading="lazy"><div><p class="section-kicker">YOUR NEXT OCCASION</p><h2>Make the room<br><em>your own.</em></h2><p>From private celebrations to corporate evenings, we would love to hear what you have in mind.</p><a class="button-gold" href="../contact/">Talk to us <span>↗</span></a></div></section>
+'''
+
+EVENTS = [
+    (14, "WED", "Wine Tasting", "with Trent Mayers", "6–8 PM"),
+    (16, "FRI", "Live Music", "Jeff", "6–9 PM"),
+    (17, "SAT", "Live Music", "Kat Chabot", "6–10 PM"),
+    (22, "THU", "Karaoke", "with ZeBruh", "7 PM onwards"),
+    (23, "FRI", "Live Music", "Brigitte and Eve", "6–9 PM"),
+    (24, "SAT", "Live Music", "Artist to be announced", "6–9 PM"),
+    (28, "WED", "Sip & Paint", "with artist Namrata", "6–8 PM"),
+    (30, "FRI", "Live Music", "Kat Chabot", "6–10 PM"),
+    (31, "SAT", "Halloween Party", "Celebrate with us", "Time to be announced"),
+]
+
+
+def event_rows():
+    return "".join(
+        f'<article class="event-row" data-date="2026-10-{day:02d}"><div class="event-row-date"><strong>{day:02d}</strong><span>OCT / {weekday}</span></div><div class="event-row-title"><h3>{name}</h3><p>{subtitle}</p></div><div class="event-row-time">{time}</div><a href="../book/" aria-label="Book a table for {name} on October {day}">↗</a></article>'
+        for day, weekday, name, subtitle, time in EVENTS
+    )
+
+
+events = f'''
+<section class="events-hero"><div class="events-hero-copy"><p class="section-kicker">THE CALENDAR</p><h1>Stay for<br><em>what's next.</em></h1><p>Live music, karaoke, wine tastings, creative evenings and the nights that bring everyone together.</p><a class="button-gold" href="#dates">Explore the dates <span>↓</span></a></div><div class="events-hero-image"><img src="../media/restaurant-detail.webp" alt="Début dining room ready for the evening"></div><span class="events-hero-index">DÉBUT / AFTER DARK</span></section>
+<section class="event-list-section section-frame" id="dates"><div class="events-list-heading"><div><p class="section-kicker">WHAT'S ON</p><h2>October <em>2026.</em></h2></div><p>Choose a night. Make it yours.<br>Event details may change; check with Début before visiting.</p></div><div id="event-list">{event_rows()}</div><p class="no-events" hidden>The October 2026 calendar has ended. Follow <a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">Début on Instagram ↗</a> for the latest dates.</p></section>
+<section class="weekly-program section-frame"><div><p class="section-kicker">THE WEEKLY RHYTHM</p><h2>Some nights<br><em>come around again.</em></h2></div><div class="weekly-list"><div><span>WED</span><h3>Wine Night</h3><p>A midweek reason to get together.</p></div><div><span>FRI</span><h3>DJ Night</h3><p>EDM and house into the early hours.</p></div><div><span>SAT</span><h3>Saturday Nights</h3><p>Music and late-night energy.</p></div></div></section>
+<section class="event-banner"><img src="../media/october-events.webp" alt="Début October 2026 event calendar poster" loading="lazy"><div><p class="section-kicker">COME TOGETHER</p><h2>Make a night<br><em>of it.</em></h2><p>Find your next occasion and book a table before the night begins.</p><a class="button-outline" href="../book/">Reserve a table <span>↗</span></a></div></section>
+'''
+
+book = '''
+<section class="booking-hero"><div class="booking-copy"><p class="section-kicker">A SEAT AT DÉBUT</p><h1>The best nights<br>start with <em>a table.</em></h1><p>Make plans for dinner, a celebration or an evening out. Tell us when you would like to visit and the Début team will confirm your request.</p><div class="booking-card"><span class="booking-card-number">01 / YOUR RESERVATION</span><h2>Let's make it happen.</h2><p>Our reservation form opens on Début's current booking system. The team will contact you within 24 hours to confirm. Début is closed on Tuesdays.</p><a class="button-gold" href="https://debutbar.ca/book" target="_blank" rel="noopener noreferrer">Continue to reservation form <span>↗</span></a><small>You will continue to debutbar.ca to submit your request.</small></div></div><div class="booking-image"><img src="../media/restaurant-arch.webp" alt="The illuminated entrance to Début's dining room"></div></section>
+<section class="booking-details section-frame"><div><span class="ornament">✦</span><h2>Need something<br><em>special?</em></h2></div><div><p>Planning a group dinner, private celebration or corporate event? Reach out and tell us what you are imagining.</p><a class="arrow-link" href="../contact/">Contact the team <span>↗</span></a></div></section>
+'''
+
+contact = f'''
+<section class="contact-hero"><div class="contact-copy"><p class="section-kicker">VISIT US / GET IN TOUCH</p><h1>Let's make<br><em>plans.</em></h1><p>Questions, private events or just finding your way here — we would love to hear from you.</p><div class="contact-list"><div><span>01 / FIND US</span><address>10 Dunlop St E<br>Barrie, ON L4M 1A3</address><a href="https://www.google.com/maps/search/?api=1&query=10+Dunlop+St+E%2C+Barrie%2C+ON+L4M+1A3" target="_blank" rel="noopener noreferrer">Get directions ↗</a></div><div><span>02 / SAY HELLO</span><a class="contact-primary" href="mailto:info@debutbar.ca">info@debutbar.ca</a><a href="tel:+19428833288">+1 942 883 3288</a></div><div><span>03 / FOLLOW ALONG</span><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="{FACEBOOK}" target="_blank" rel="noopener noreferrer">Facebook ↗</a></div></div></div><div class="contact-photos"><img src="../media/restaurant-room.webp" alt="Inside Début Bar and Restaurant" class="contact-photo-main"><img src="../media/restaurant-arch.webp" alt="The illuminated arches at Début" class="contact-photo-small"></div></section>
+<section class="contact-final section-frame"><p class="section-kicker">COME BY</p><h2>We'll see you<br><em>at Début.</em></h2><a class="button-gold" href="../book/">Book a table <span>↗</span></a></section>
+'''
+
+
+def build_menu():
+    source = (ROOT / "menu-page.html").read_text(encoding="utf-8")
+    source = source.replace('href="style.css"', 'href="../style.css"><link rel="stylesheet" href="../site.css"')
+    source = source.replace('src="menu-data.js"', 'src="../menu-data.js"')
+    source = source.replace('src="app.js"', 'src="../app.js"')
+    source = source.replace('</head>', '<script>window.DEBUT_ASSET_PREFIX="../";</script><script defer src="../site.js"></script></head>')
+    source = source.replace('href="DEBUT-3D-Menu-Print.pdf"', 'href="../DEBUT-3D-Menu-Print.pdf"')
+    source = source.replace('src="debut-food-hero.png"', 'src="../debut-food-hero.png"')
+    source = source.replace('src="scan-menu-qr.png"', 'src="../scan-menu-qr.png"')
+    source = source.replace('<body>', '<body class="menu-page">')
+    source = re.sub(r'<header class="topbar">.*?</header>', nav("../", "Menu"), source, count=1, flags=re.S)
+    source = source.replace('</main>', '</main>' + footer("../"), 1)
+    source = source.replace('href="https://benzom666.github.io/debut-3d-menu-temp/#appetizers"', 'href="https://benzom666.github.io/debut-3d-menu-temp/menu/#appetizers"')
+    target = DIST / "menu" / "index.html"
+    target.parent.mkdir(exist_ok=True)
+    target.write_text(source, encoding="utf-8")
+
+
+def main():
+    pages = [
+        ("", "Début Bar & Restaurant", "Dinner, cocktails and nights to remember in downtown Barrie, Ontario.", home, "home-page"),
+        ("restaurant", "Restaurant", "Explore the dining room, bar and atmosphere at Début Bar & Restaurant in Barrie.", restaurant, "restaurant-page"),
+        ("events", "Events", "Live music, karaoke, wine tastings and more at Début Bar & Restaurant in Barrie.", events, "events-page"),
+        ("book", "Book a Table", "Request a table at Début Bar & Restaurant in downtown Barrie.", book, "book-page"),
+        ("contact", "Contact", "Visit Début Bar & Restaurant at 10 Dunlop St E, Barrie, Ontario, or get in touch with our team.", contact, "contact-page"),
+    ]
+    for route, title, description, body, kind in pages:
+        folder = DIST / route if route else DIST
+        folder.mkdir(exist_ok=True)
+        (folder / "index.html").write_text(page(title, description, body, route, kind), encoding="utf-8")
+    build_menu()
+    print("Built homepage, restaurant, events, booking, contact, and menu")
+
+
+if __name__ == "__main__":
+    main()

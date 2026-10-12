@@ -6,3 +6,5 @@ check-page-*.png
 .venv/
 image_sources.json
 *.tar.gz
+*.pindex.tmp
+debutbar-*.png

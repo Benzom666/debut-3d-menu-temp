@@ -5,7 +5,7 @@ import qrcode
 from qrcode.constants import ERROR_CORRECT_H
 
 ROOT = Path(__file__).resolve().parent
-TARGET = "https://benzom666.github.io/debut-3d-menu-temp/#appetizers"
+TARGET = "https://benzom666.github.io/debut-3d-menu-temp/menu/#appetizers"
 
 
 def main():

@@ -11,7 +11,7 @@ def main():
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=True)
         page = browser.new_page()
-        page.goto((ROOT / "dist" / "index.html").as_uri(), wait_until="load")
+        page.goto((ROOT / "dist" / "menu" / "index.html").as_uri(), wait_until="load")
         page.emulate_media(media="print")
         page.pdf(path=str(OUTPUT), format="Letter", print_background=True, prefer_css_page_size=True)
         browser.close()

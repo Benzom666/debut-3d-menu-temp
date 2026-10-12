@@ -21,7 +21,7 @@ class BrowserMenuTests(unittest.TestCase):
 
     def test_every_section_and_item_is_readable(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 900})
-        page.goto((ROOT / "dist" / "index.html").as_uri())
+        page.goto((ROOT / "dist" / "menu" / "index.html").as_uri())
         self.assertEqual(page.locator(".menu-section").count(), len(MENU["sections"]))
         self.assertEqual(page.locator(".menu-item").count(), sum(len(s["items"]) for s in MENU["sections"]))
         self.assertTrue(page.get_by_text("Début Double Stacked Cheddar Burger").is_visible())
@@ -29,7 +29,7 @@ class BrowserMenuTests(unittest.TestCase):
 
     def test_section_navigation_works_without_horizontal_overflow_on_mobile(self):
         page = self.browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
-        page.goto((ROOT / "dist" / "index.html").as_uri())
+        page.goto((ROOT / "dist" / "menu" / "index.html").as_uri())
         page.locator('a[href="#desserts"]').first.click()
         self.assertEqual(page.evaluate("location.hash"), "#desserts")
         self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
@@ -37,7 +37,7 @@ class BrowserMenuTests(unittest.TestCase):
 
     def test_each_item_has_a_lazy_loaded_visual_and_mobile_viewer(self):
         page = self.browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
-        page.goto((ROOT / "dist" / "index.html").as_uri())
+        page.goto((ROOT / "dist" / "menu" / "index.html").as_uri())
         cards = page.locator(".menu-item")
         self.assertEqual(cards.count(), 92)
         self.assertEqual(cards.locator("img[loading='lazy']").count(), 92)
@@ -52,7 +52,7 @@ class BrowserMenuTests(unittest.TestCase):
 
     def test_scan_code_points_to_public_menu(self):
         page = self.browser.new_page()
-        page.goto((ROOT / "dist" / "index.html").as_uri())
+        page.goto((ROOT / "dist" / "menu" / "index.html").as_uri())
         qr = page.locator(".scan-code img")
         self.assertTrue(qr.is_visible())
         self.assertIn("github.io", page.locator(".scan-code a").get_attribute("href"))

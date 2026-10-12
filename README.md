@@ -1,27 +1,43 @@
-# Début 3D Menu
+# Début Bar & Restaurant website
 
-An interactive digital menu and a matching letter-size print PDF, based on `MENU DEBUT 2.pdf`.
+A complete temporary public website for Début in downtown Barrie. The illustrated menu is one page of the site. The project is static HTML/CSS/JavaScript and can run on GitHub Pages or Sites.
 
-## Open the menu
+## Preview
 
-Open `dist/index.html` in a browser, or use the temporary public address at `https://benzom666.github.io/debut-3d-menu-temp/`. Category links jump to each section. Each menu entry has an illustrative 3D-style image that opens in a full-screen viewer; cards use a subtle 3D tilt with a mouse, and motion is removed when the system requests reduced motion.
+```sh
+python3 -m http.server 8000 --directory dist
+```
 
-The print file is `DEBUT-3D-Menu-Print.pdf`. The site also includes a download link for it.
+Open `http://localhost:8000/`. The temporary public address is `https://benzom666.github.io/debut-3d-menu-temp/`.
 
-## Edit and export
+## Pages and live services
 
-Edit `menu.json`, then run:
+- `/` — home
+- `/restaurant/` — venue and experience
+- `/menu/` — 92 illustrated menu items, section navigation, item viewer, and print menu
+- `/events/` — October 2026 dates and weekly programming; expired dates hide automatically
+- `/book/` — handoff to the existing Début reservation system
+- `/contact/` — address, directions, phone, email, and social links
+
+Ordering goes to the verified Clover ordering URL. Staff login goes to the existing password protected admin at `debutbar.ca/admin`. The booking page links to the original form so requests continue to reach the restaurant while a replacement backend is undecided. No reservation data is collected by this static site.
+
+The food and drink visuals are illustrations, not rotatable 3D assets or augmented reality models. The print PDF QR opens the `/menu/` route on the temporary public domain. Actual item presentation may vary.
+
+## Edit and build
+
+Update `build_full_site.py` for website copy and events, `dist/site.css` for the shared visual system, and `menu-page.html` and `menu.json` for the menu. Run:
 
 ```sh
 python3 build.py
+python3 build_full_site.py
 python3 generate_qr.py
-python3 integrate_images.py
 python3 export_pdf.py
 ```
 
-`build.py` creates `dist/menu-data.js`; `generate_qr.py` creates the scannable QR image; `integrate_images.py` converts generated art into WebP images; `export_pdf.py` creates the root PDF and copies it into `dist/`.
-Install the listed Python dependencies with `pip install -r requirements.txt`; PDF export also requires Playwright Chromium (`playwright install chromium`).
+Install dependencies from `requirements.txt` and Playwright Chromium for PDF export and browser checks. Verify with:
 
-The source listed no prices for water, pop, juice, or bottled drinks, so these remain unpriced. Food names and numeric prices are preserved; descriptions have been lightly edited for spelling and clarity. Promotional offers are reproduced from the supplied menu and should be checked for current availability before public use.
+```sh
+.venv/bin/python -m unittest discover -s tests -v
+```
 
-The food hero and item images were generated for this project with the built-in image generation tool. The shared item prompt calls for a photorealistic CGI render of the specific listed dish or drink, isolated on a transparent background, shown on a dark plate or suitable vessel under warm studio lighting, with no text or logos. These images are illustrative and may differ from actual plating.
+The menu was transcribed from `MENU DEBUT 2.pdf`. Some source drinks have no listed price, and promotional offers should be checked against the restaurant before long term publication. October 2026 event details came from the original [Début events page](https://debutbar.ca/events) on October 12, 2026.
