@@ -6,11 +6,8 @@
   const sections = document.getElementById('sections');
   const viewer = document.getElementById('dish-viewer');
   const viewerImage = document.getElementById('viewer-image');
-  const viewerModel = document.getElementById('viewer-model');
   const allEntries = [];
   let viewerIndex = 0;
-  let modelRequest = 0;
-  let modelViewerImport;
   document.getElementById('menu-note').textContent = menu.note;
 
   const money = (value) => '$' + Number(value).toFixed(Number.isInteger(value) ? 0 : 1);
@@ -49,7 +46,7 @@
       const entryIndex = allEntries.push({ item, imagePath }) - 1;
       const visual = make('button', 'item-visual');
       visual.type = 'button';
-      visual.setAttribute('aria-label', (item.model ? 'Rotate 3D model of ' : 'View illustration of ') + item.name);
+      visual.setAttribute('aria-label', 'View illustration of ' + item.name);
       const thumbnail = make('img', 'item-image');
       thumbnail.src = imagePath;
       thumbnail.alt = '';
@@ -57,7 +54,7 @@
       thumbnail.decoding = 'async';
       thumbnail.width = 768;
       thumbnail.height = 768;
-      visual.append(thumbnail, make('span', 'visual-action', item.model ? 'ROTATE DISH ↗' : 'VIEW DISH ↗'));
+      visual.append(thumbnail, make('span', 'visual-action', 'VIEW DISH ↗'));
       visual.addEventListener('click', () => openViewer(entryIndex));
       article.append(visual);
       const top = make('div', 'item-top');
@@ -93,37 +90,11 @@
   function showViewerItem(index) {
     viewerIndex = (index + allEntries.length) % allEntries.length;
     const entry = allEntries[viewerIndex];
-    const currentRequest = ++modelRequest;
     viewerImage.src = entry.imagePath;
     viewerImage.alt = 'Illustration of ' + entry.item.name;
     viewerImage.hidden = false;
-    viewerModel.hidden = true;
-    viewerModel.removeAttribute('src');
-    viewerModel.removeAttribute('ios-src');
     document.getElementById('viewer-kind').textContent = 'DÉBUT · DISH ILLUSTRATION';
     document.getElementById('viewer-disclaimer').textContent = 'Illustrative image. Actual presentation may vary.';
-    if (entry.item.model?.glb) {
-      const prefix = window.DEBUT_ASSET_PREFIX || '';
-      viewerModel.setAttribute('src', prefix + entry.item.model.glb);
-      viewerModel.setAttribute('alt', 'Interactive 3D model of ' + entry.item.name);
-      viewerModel.setAttribute('poster', entry.imagePath);
-      if (entry.item.model.usdz) viewerModel.setAttribute('ios-src', prefix + entry.item.model.usdz);
-      document.getElementById('viewer-kind').textContent = 'DÉBUT · INTERACTIVE MODEL';
-      document.getElementById('viewer-disclaimer').textContent = 'Drag to rotate. Scroll or pinch to zoom. View in your space on supported devices.';
-      const ready = customElements.get('model-viewer')
-        ? Promise.resolve()
-        : (modelViewerImport ||= import('https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js'));
-      ready.then(() => {
-        if (currentRequest !== modelRequest) return;
-        viewerModel.hidden = false;
-        viewerImage.hidden = true;
-      }).catch(() => {
-        if (currentRequest !== modelRequest) return;
-        modelViewerImport = null;
-        document.getElementById('viewer-kind').textContent = 'DÉBUT · DISH ILLUSTRATION';
-        document.getElementById('viewer-disclaimer').textContent = 'Interactive model unavailable. Showing the dish illustration.';
-      });
-    }
     document.getElementById('viewer-name').textContent = entry.item.name + (entry.item.price !== undefined ? ' · ' + money(entry.item.price) : '');
     document.getElementById('viewer-description').textContent = entry.item.description || '';
     document.getElementById('viewer-count').textContent = String(viewerIndex + 1).padStart(2, '0') + ' / ' + String(allEntries.length).padStart(2, '0');
@@ -140,14 +111,12 @@
   viewer.querySelector('.viewer-next').addEventListener('click', () => showViewerItem(viewerIndex + 1));
   viewer.addEventListener('click', event => { if (event.target === viewer) viewer.close(); });
   viewer.addEventListener('keydown', event => {
-    if (!viewerModel.hidden && event.target.closest?.('model-viewer')) return;
     if (event.key === 'ArrowLeft') showViewerItem(viewerIndex - 1);
     if (event.key === 'ArrowRight') showViewerItem(viewerIndex + 1);
   });
   let touchStartX = 0;
   viewer.addEventListener('touchstart', event => { touchStartX = event.changedTouches[0].screenX; }, { passive: true });
   viewer.addEventListener('touchend', event => {
-    if (!viewerModel.hidden && event.target.closest('model-viewer')) return;
     const delta = event.changedTouches[0].screenX - touchStartX;
     if (Math.abs(delta) > 60) showViewerItem(viewerIndex + (delta < 0 ? 1 : -1));
   }, { passive: true });
