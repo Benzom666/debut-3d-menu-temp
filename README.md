@@ -16,10 +16,10 @@ Open `http://localhost:8000/`. The temporary public address is `https://benzom66
 - `/restaurant/` — venue and experience
 - `/menu/` — 92 illustrated menu items, section navigation, item viewer, and print menu
 - `/events/` — October 2026 dates and weekly programming; expired dates hide automatically
-- `/book/` — handoff to the existing Début reservation system
+- `/book/` — direct phone and email reservation requests
 - `/contact/` — address, directions, phone, email, and social links
 
-Ordering goes to the verified Clover ordering URL. Staff login goes to the existing password protected admin at `debutbar.ca/admin`. The booking page links to the original form so requests continue to reach the restaurant while a replacement backend is undecided. No reservation data is collected by this static site.
+Ordering goes to the verified Clover ordering URL. Staff login still opens the original admin at `debutbar.ca/admin`. The booking page uses phone and email because the original reservation data endpoint needs server-side access control before directing new guests to that form. No reservation data is collected by this static site.
 
 The food and drink visuals are illustrations, not rotatable 3D assets or augmented reality models. The print PDF QR opens the `/menu/` route on the temporary public domain. Actual item presentation may vary.
 

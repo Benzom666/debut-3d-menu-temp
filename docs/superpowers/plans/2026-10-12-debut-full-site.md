@@ -2,7 +2,7 @@
 
 **Goal:** Replace the temporary menu-only landing page with a complete public Début website while retaining the illustrated menu as one route.
 
-**Architecture:** Generate static HTML pages into `dist/`; share CSS and JS; hand operational bookings, ordering, and staff login to verified live destinations.
+**Architecture:** Generate static HTML pages into `dist/`; share CSS and JS; route bookings to direct phone and email contact, ordering to Clover, and staff login to the original admin while its data endpoint is secured.
 
 **Tech Stack:** Python 3, HTML, CSS, JavaScript, Playwright, GitHub Pages, Sites static hosting.
 
