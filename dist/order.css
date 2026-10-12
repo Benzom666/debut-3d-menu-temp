@@ -60,3 +60,9 @@
   .cart-item{grid-template-columns:45px minmax(0,1fr)}
   .cart-item .quantity-control{grid-column:2;justify-self:end}
 }
+
+.order-status{font-size:13px;line-height:1.5;margin:12px 0 0}
+.order-status[data-kind="ok"]{color:var(--color-cream)}
+.order-status[data-kind="error"]{color:#f5bb9e}
+.email-fallback{display:inline-block;margin-top:12px;color:var(--color-gold);font-size:12px;font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.order-status[hidden],.email-fallback[hidden],#request-result[hidden],#order-form[hidden]{display:none}

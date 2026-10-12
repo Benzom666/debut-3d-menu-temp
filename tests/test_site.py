@@ -28,7 +28,7 @@ class DebutSiteTests(unittest.TestCase):
         self.assertTrue(page.get_by_role("heading", level=1).is_visible())
         for href in ("menu/", "events/", "restaurant/", "book/", "contact/"):
             self.assertGreater(page.locator(f'a[href="{href}"]').count(), 0, href)
-        self.assertTrue(page.get_by_role("link", name="Order online", exact=False).first.get_attribute("href").startswith("https://www.clover.com/"))
+        self.assertEqual(page.get_by_role("link", name="Order online", exact=False).first.get_attribute("href"), "order/")
         self.assertTrue(page.get_by_role("link", name="Staff login", exact=False).first.get_attribute("href").startswith("https://debutbar.ca/admin"))
         page.close()
 

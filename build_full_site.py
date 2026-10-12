@@ -7,7 +7,6 @@ import re
 
 ROOT = Path(__file__).resolve().parent
 DIST = ROOT / "dist"
-CLOVER = "https://www.clover.com/online-ordering/debut-bar-and-restaurant-barrie"
 INSTAGRAM = "https://www.instagram.com/debutbar.ca/"
 FACEBOOK = "https://www.facebook.com/profile.php?id=61581988111686"
 
@@ -20,8 +19,8 @@ def nav(prefix="", active=""):
     )
     return f'''<header class="global-header" id="site-top">
       <a class="global-brand" href="{prefix}index.html" aria-label="Début home"><span class="brand-logo-mark"><img src="{prefix}media/debut-logo.png" alt="" width="3785" height="3706"></span><span>DÉBUT<small>BAR & RESTAURANT</small></span></a>
-      <nav class="global-nav" id="global-nav" aria-label="Main navigation">{items}<a class="mobile-order" href="{CLOVER}" target="_blank" rel="noopener noreferrer">Order online ↗</a></nav>
-      <div class="header-actions"><a class="order-link" href="{CLOVER}" target="_blank" rel="noopener noreferrer">Order online ↗</a><a class="reserve-link" href="{prefix}book/">Book a table <span aria-hidden="true">↗</span></a></div>
+      <nav class="global-nav" id="global-nav" aria-label="Main navigation">{items}<a class="mobile-order" href="{prefix}order/">Order online ↗</a></nav>
+      <div class="header-actions"><a class="order-link" href="{prefix}order/">Order online ↗</a><a class="reserve-link" href="{prefix}book/">Book a table <span aria-hidden="true">↗</span></a></div>
       <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="global-nav"><span></span><span></span></button>
     </header>'''
 
@@ -29,7 +28,7 @@ def nav(prefix="", active=""):
 def footer(prefix=""):
     return f'''<footer class="global-footer">
       <div class="footer-top"><div><p class="section-kicker">DÉBUT · BARRIE</p><h2>Your table<br><em>is waiting.</em></h2></div><a class="footer-book" href="{prefix}book/">Reserve your table <span aria-hidden="true">↗</span></a></div>
-      <div class="footer-grid"><div><a class="footer-logo" href="{prefix}index.html"><img src="{prefix}media/debut-logo.png" alt="Début Bar & Restaurant" width="3785" height="3706" loading="lazy"></a><p>10 Dunlop St E<br>Barrie, ON L4M 1A3</p></div><div><span class="footer-label">EXPLORE</span><a href="{prefix}restaurant/">Restaurant</a><a href="{prefix}menu/">Menu</a><a href="{prefix}events/">Events</a><a href="{prefix}private-events/">Private events</a><a href="{prefix}contact/">Contact</a></div><div><span class="footer-label">CONNECT</span><a href="mailto:info@debutbar.ca">info@debutbar.ca</a><a href="tel:+19428833288">+1 942 883 3288</a><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="{FACEBOOK}" target="_blank" rel="noopener noreferrer">Facebook ↗</a></div><div><span class="footer-label">VISIT</span><a href="https://www.google.com/maps/search/?api=1&query=10+Dunlop+St+E%2C+Barrie%2C+ON+L4M+1A3" target="_blank" rel="noopener noreferrer">Get directions ↗</a><a href="{CLOVER}" target="_blank" rel="noopener noreferrer">Order online ↗</a><a href="https://debutbar.ca/admin" target="_blank" rel="noopener noreferrer">Staff login ↗</a></div></div>
+      <div class="footer-grid"><div><a class="footer-logo" href="{prefix}index.html"><img src="{prefix}media/debut-logo.png" alt="Début Bar & Restaurant" width="3785" height="3706" loading="lazy"></a><p>10 Dunlop St E<br>Barrie, ON L4M 1A3</p></div><div><span class="footer-label">EXPLORE</span><a href="{prefix}restaurant/">Restaurant</a><a href="{prefix}menu/">Menu</a><a href="{prefix}events/">Events</a><a href="{prefix}private-events/">Private events</a><a href="{prefix}contact/">Contact</a></div><div><span class="footer-label">CONNECT</span><a href="mailto:info@debutbar.ca">info@debutbar.ca</a><a href="tel:+19428833288">+1 942 883 3288</a><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="{FACEBOOK}" target="_blank" rel="noopener noreferrer">Facebook ↗</a></div><div><span class="footer-label">VISIT</span><a href="https://www.google.com/maps/search/?api=1&query=10+Dunlop+St+E%2C+Barrie%2C+ON+L4M+1A3" target="_blank" rel="noopener noreferrer">Get directions ↗</a><a href="{prefix}order/">Order online ↗</a><a href="https://debutbar.ca/admin" target="_blank" rel="noopener noreferrer">Staff login ↗</a></div></div>
       <div class="footer-bottom"><span>© DÉBUT BAR & RESTAURANT</span><span>BARRIE, ONTARIO · CANADA</span><a href="#site-top">BACK TO TOP ↑</a></div>
     </footer>'''
 
@@ -146,18 +145,6 @@ def main():
         folder = DIST / route if route else DIST
         folder.mkdir(exist_ok=True)
         (folder / "index.html").write_text(page(title, description, body, route, kind), encoding="utf-8")
-    # The ordering experience is the homepage; restaurant and event content follows it.
-    order_source = (ROOT / "order-page.html").read_text(encoding="utf-8")
-    home_sections = home.split("\n", 2)[2]
-    root_order = order_source.replace('../', '').replace('data-asset-prefix=""', 'data-asset-prefix=""')
-    root_order = root_order.replace('<body class="order-page full-site"', '<body class="order-page full-site home-page"', 1)
-    home_nav = nav()
-    home_nav = home_nav.replace('<div class="header-actions">', '<div class="header-actions"><button id="open-cart" class="cart-trigger" type="button" aria-label="View order"><span>YOUR ORDER</span><span id="cart-count" class="cart-count">0</span><span aria-hidden="true">↗</span></button>', 1)
-    root_order = re.sub(r'<header class="order-header">.*?</header>', home_nav, root_order, count=1, flags=re.S)
-    root_order = root_order.replace('<title>Order for pickup | DÉBUT</title>', '<title>DÉBUT Bar & Restaurant | Barrie</title>', 1)
-    root_order = root_order.replace("</head>", '<script defer src="site.js"></script></head>', 1)
-    root_order = root_order.replace('</main>', home_sections + '</main>' + footer(''), 1)
-    (DIST / "index.html").write_text(root_order, encoding="utf-8")
     build_menu()
     order = DIST / "order"
     order.mkdir(exist_ok=True)

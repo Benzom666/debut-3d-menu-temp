@@ -20,14 +20,13 @@ class OrderingExperienceTests(unittest.TestCase):
         cls.browser.close()
         cls.playwright.stop()
 
-    def test_homepage_features_generated_dishes_and_side_list(self):
+    def test_homepage_leads_with_restaurant_and_links_to_ordering(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 900})
         page.goto((ROOT / "dist" / "index.html").as_uri())
-        self.assertEqual(page.locator(".dish-rail button[data-item-id]").count(), 66)
-        self.assertIn("images/generated/appetizers-01.webp", page.locator("#featured-image").get_attribute("src"))
-        self.assertTrue(page.locator(".dish-browser").is_visible())
-        page.keyboard.press("ArrowRight")
-        self.assertIn("Chicken Quesadilla", page.locator("#featured-name").inner_text())
+        self.assertTrue(page.locator(".home-hero").is_visible())
+        self.assertIn("The night", page.get_by_role("heading", level=1).inner_text())
+        self.assertEqual(page.locator("#featured-image").count(), 0)
+        self.assertGreater(page.locator('a[href="order/"]').count(), 0)
         page.close()
 
     def test_menu_products_and_cart_math(self):
@@ -65,6 +64,52 @@ class OrderingExperienceTests(unittest.TestCase):
         self.assertIn("request", page.locator("#order-form").inner_text().lower())
         self.assertIn("confirm", page.locator("#order-form").inner_text().lower())
         self.assertEqual(page.locator("#order-form input[required]").count(), 4)
+        page.close()
+
+    def test_pickup_submission_sends_complete_order_and_clears_cart_on_success(self):
+        page = self.browser.new_page()
+        payloads = []
+        def formspree(route):
+            payloads.append(route.request.post_data_json)
+            route.fulfill(status=200, content_type="application/json", headers={"access-control-allow-origin": "*"}, body='{"ok":true}')
+        page.route("https://formspree.io/f/mnpjboyk", formspree)
+        page.goto((ROOT / "dist" / "order" / "index.html").as_uri())
+        page.get_by_role("button", name="Add Butter Chicken Poutine to order").click()
+        page.get_by_role("button", name="View order").click()
+        page.locator('[name="name"]').fill("Alex Test")
+        page.locator('[name="email"]').fill("alex@example.com")
+        page.locator('[name="phone"]').fill("7055551234")
+        page.locator('[name="date"]').fill(page.locator('[name="date"]').get_attribute("min"))
+        page.locator('[name="time"]').select_option("18:00")
+        page.locator('[name="notes"]').fill("No peanuts")
+        page.locator('#order-form button[type="submit"]').click()
+        page.get_by_role("heading", name="Request sent.").wait_for()
+        self.assertEqual(len(payloads), 1)
+        self.assertEqual(payloads[0]["email"], "alex@example.com")
+        self.assertEqual(payloads[0]["items"][0]["name"], "Butter Chicken Poutine")
+        self.assertEqual(payloads[0]["items"][0]["quantity"], 1)
+        self.assertEqual(payloads[0]["estimated_total"], "$16.95")
+        self.assertEqual(payloads[0]["notes"], "No peanuts")
+        self.assertEqual(page.locator("#cart-count").inner_text(), "0")
+        page.close()
+
+    def test_failed_pickup_submission_preserves_cart_and_shows_email_fallback(self):
+        page = self.browser.new_page()
+        page.route("https://formspree.io/f/mnpjboyk", lambda route: route.fulfill(status=500, content_type="application/json", headers={"access-control-allow-origin": "*"}, body='{"error":"unavailable"}'))
+        page.goto((ROOT / "dist" / "order" / "index.html").as_uri())
+        page.get_by_role("button", name="Add Butter Chicken Poutine to order").click()
+        page.get_by_role("button", name="View order").click()
+        page.locator('[name="name"]').fill("Alex Test")
+        page.locator('[name="email"]').fill("alex@example.com")
+        page.locator('[name="phone"]').fill("7055551234")
+        page.locator('[name="date"]').fill(page.locator('[name="date"]').get_attribute("min"))
+        page.locator('[name="time"]').select_option("18:00")
+        page.locator('#order-form button[type="submit"]').click()
+        page.get_by_text("Could not send your request.", exact=False).wait_for()
+        self.assertEqual(page.locator("#cart-count").inner_text(), "1")
+        self.assertTrue(page.locator("#order-form").is_visible())
+        self.assertTrue(page.locator("#email-link").is_visible())
+        self.assertTrue(page.locator("#email-link").get_attribute("href").startswith("mailto:info@debutbar.ca"))
         page.close()
 
 

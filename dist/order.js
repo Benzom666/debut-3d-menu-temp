@@ -177,17 +177,45 @@
   dateInput.max=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Toronto',year:'numeric',month:'2-digit',day:'2-digit'}).format(maxDate);
   const select=$('order-form').elements.time;
   for(let minutes=12*60;minutes<=21*60;minutes+=30){const option=document.createElement('option');const h=Math.floor(minutes/60),m=minutes%60;option.value=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;option.textContent=new Intl.DateTimeFormat('en-CA',{hour:'numeric',minute:'2-digit'}).format(new Date(2020,0,1,h,m));select.append(option)}
-  $('order-form').addEventListener('submit',event=>{
-    event.preventDefault(); if(!Object.keys(cart).length)return;
-    const form=event.currentTarget; if(!form.reportValidity())return;
+  $('order-form').addEventListener('submit',async event=>{
+    event.preventDefault();
+    const form=event.currentTarget;
+    const submitButton=form.querySelector('button[type="submit"]');
+    if(submitButton.disabled || !Object.keys(cart).length || !form.reportValidity())return;
     const ref='DB-'+Date.now().toString(36).toUpperCase().slice(-7);
     const subtotal=dishes.reduce((sum,d)=>sum+Math.round(d.price*100)*(cart[d.id]||0),0);
-    const total=subtotal+Math.round(subtotal*taxRate);
-    const lines=dishes.filter(d=>cart[d.id]).map(d=>`${cart[d.id]} × ${d.name} — ${money(d.price*cart[d.id])}`);
-    const body=[`Pickup request ${ref}`,'',...lines,'',`Estimated total including 13% HST: ${money(total/100)}`,'',`Name: ${form.elements.name.value.trim()}`,`Email: ${form.elements.email.value.trim()}`,`Phone: ${form.elements.phone.value.trim()}`,`Preferred pickup: ${form.elements.date.value} at ${form.elements.time.value}`,`Notes: ${form.elements.notes.value.trim() || 'None'}`,'','Please reply to confirm availability, final pricing, and pickup time.'].join('\n');
-    const url=`mailto:info@debutbar.ca?subject=${encodeURIComponent(`Début pickup request ${ref}`)}&body=${encodeURIComponent(body)}`;
-    $('email-link').href=url; $('request-reference').textContent=`Reference ${ref} · Estimated total ${money(total/100)}`;
-    form.hidden=true; $('request-result').hidden=false; window.location.href=url;
+    const tax=Math.round(subtotal*taxRate);
+    const total=subtotal+tax;
+    const items=dishes.filter(d=>cart[d.id]).map(d=>({name:d.name,quantity:cart[d.id],unit_price:money(d.price),line_total:money(d.price*cart[d.id])}));
+    const lines=items.map(d=>`${d.quantity} × ${d.name} — ${d.line_total}`);
+    const name=form.elements.name.value.trim(),email=form.elements.email.value.trim(),phone=form.elements.phone.value.trim();
+    const date=form.elements.date.value,time=form.elements.time.value,notes=form.elements.notes.value.trim();
+    const message=[`Pickup request ${ref}`,'',...lines,'',`Subtotal: ${money(subtotal/100)}`,`Estimated HST (13%): ${money(tax/100)}`,`Estimated total: ${money(total/100)}`,'',`Name: ${name}`,`Email: ${email}`,`Phone: ${phone}`,`Preferred pickup: ${date} at ${time}`,`Notes: ${notes || 'None'}`,'','Please reply to confirm availability, final pricing, and pickup time.'].join('\n');
+    const subject=`Début pickup request ${ref}`;
+    $('email-link').href=`mailto:info@debutbar.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    const status=$('order-status');
+    status.hidden=false; status.dataset.kind='ok'; status.textContent='Sending your pickup request…';
+    $('email-link').hidden=true;
+    submitButton.disabled=true;
+    submitButton.innerHTML='SENDING…';
+    try {
+      const response=await fetch(form.action,{
+        method:'POST',
+        headers:{'Content-Type':'application/json',Accept:'application/json'},
+        body:JSON.stringify({name,email,phone,date,time,notes,reference:ref,request_type:'Pickup order',items,subtotal:money(subtotal/100),estimated_hst:money(tax/100),estimated_total:money(total/100),message,_subject:subject})
+      });
+      if(!response.ok)throw new Error(`Formspree returned ${response.status}`);
+      $('request-reference').textContent=`Reference ${ref} · Estimated total ${money(total/100)}`;
+      status.hidden=true; form.hidden=true; $('request-result').hidden=false;
+      cart={}; saveCart(); renderCart(); form.reset();
+      $('live-message').textContent=`Pickup request ${ref} sent`;
+    } catch (_) {
+      status.dataset.kind='error';
+      status.textContent='Could not send your request. Try again, use Email instead, or call +1 942 883 3288.';
+      $('email-link').hidden=false;
+      submitButton.disabled=false;
+      submitButton.innerHTML='PLACE PICKUP REQUEST <span>↗</span>';
+    }
   });
   $('new-request').addEventListener('click',()=>{$('request-result').hidden=true;$('order-form').hidden=false});
 })();
