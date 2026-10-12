@@ -55,3 +55,18 @@
   .menu-page .item-image{transform:scale(.92)}
   .menu-page .item-visual:hover .item-image{transform:scale(1.02)}
 }
+
+/* The featured plate at the top of the full menu mirrors pickup. */
+.hero-dish-controls{width:min(100%,440px);margin-top:28px;display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:12px}
+.hero-dish-controls button{width:44px;height:44px;border:1px solid var(--line);background:transparent;color:var(--cream);font-size:22px;cursor:pointer}
+.hero-dish-controls button:hover{background:var(--gold);color:var(--ink)}
+.hero-dish-controls button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.hero-dish-controls div{min-width:0}
+.hero-dish-controls div>span{display:flex;justify-content:space-between;gap:12px;color:var(--gold);font-size:9px;font-weight:800;letter-spacing:.16em}
+.hero-dish-controls strong{display:block;margin-top:5px;font:400 19px/1.15 Georgia,serif;overflow-wrap:anywhere}
+.menu-page .hero-art #menu-featured-image{height:auto;aspect-ratio:1/1;animation:menu-plate-turn 36s linear infinite}
+.menu-page .hero-art:hover #menu-featured-image{animation-play-state:paused}
+@keyframes menu-plate-turn{to{transform:rotate(360deg)}}
+@media screen and (max-width:700px){.hero-dish-controls{margin-top:20px}.hero-art{margin-top:0}}
+@media print{.hero-dish-controls{display:none}}
+@media(prefers-reduced-motion:reduce){.menu-page .hero-art #menu-featured-image{animation:none!important}}

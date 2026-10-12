@@ -28,13 +28,17 @@
           <h1 id="hero-title">The Début<br><em>menu.</em></h1>
           <p class="hero-intro">Browse food, cocktails and more from Début Bar & Restaurant in downtown Barrie.</p>
           <a class="hero-cta" href="#menu">Explore the menu <span aria-hidden="true">↘</span></a>
-          <div class="hero-index"><span>12 MENU SECTIONS</span><span>BARRIE · ONTARIO</span></div>
+          <div class="hero-dish-controls" aria-label="Featured dishes">
+            <button id="menu-featured-prev" type="button" aria-label="Previous featured dish">←</button>
+            <div><span>FEATURED PLATE <span id="menu-featured-count">01 / 92</span></span><strong id="menu-featured-name">Butter Chicken Poutine</strong></div>
+            <button id="menu-featured-next" type="button" aria-label="Next featured dish">→</button>
+          </div>
         </div>
         <div class="hero-art" aria-label="Butter chicken poutine" role="img">
           <div class="hero-orbit orbit-one"></div>
           <div class="hero-orbit orbit-two"></div>
           <div class="hero-disc"></div>
-          <img src="../images/generated/appetizers-01.webp" alt="" width="1256" height="1256" fetchpriority="high">
+          <img id="menu-featured-image" src="../images/generated/appetizers-01.webp" alt="" width="1256" height="1256" fetchpriority="high" decoding="async">
           <div class="hero-art-label">DÉBUT<br><span>ON THE TABLE</span></div>
         </div>
         <a class="cover-qr" href="https://benzom666.github.io/debut-3d-menu-temp/menu/#appetizers"><img src="../scan-menu-qr.png" alt="Scan to view the illustrated menu" width="900" height="900"><span>SCAN TO SEE<br>EVERY DISH</span></a>

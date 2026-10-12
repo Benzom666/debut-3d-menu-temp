@@ -75,6 +75,34 @@
     sections.append(panel);
   });
 
+  const heroPlate = document.getElementById('menu-featured-image');
+  const heroArt = document.querySelector('.hero-art');
+  const heroControls = document.querySelector('.hero-dish-controls');
+  let featuredIndex = 0;
+  function showFeatured(index) {
+    featuredIndex = (index + allEntries.length) % allEntries.length;
+    const entry = allEntries[featuredIndex];
+    heroPlate.src = entry.imagePath;
+    heroArt.setAttribute('aria-label', entry.item.name);
+    document.getElementById('menu-featured-name').textContent = entry.item.name;
+    document.getElementById('menu-featured-count').textContent = `${String(featuredIndex + 1).padStart(2, '0')} / ${allEntries.length}`;
+  }
+  heroControls.querySelector('#menu-featured-prev').addEventListener('click', () => showFeatured(featuredIndex - 1));
+  heroControls.querySelector('#menu-featured-next').addEventListener('click', () => showFeatured(featuredIndex + 1));
+  heroControls.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      showFeatured(featuredIndex + (event.key === 'ArrowRight' ? 1 : -1));
+    }
+  });
+  let heroTouchX = 0, heroTouchY = 0;
+  heroArt.addEventListener('touchstart', event => { heroTouchX = event.changedTouches[0].screenX; heroTouchY = event.changedTouches[0].screenY; }, { passive: true });
+  heroArt.addEventListener('touchend', event => {
+    const dx = event.changedTouches[0].screenX - heroTouchX;
+    const dy = event.changedTouches[0].screenY - heroTouchY;
+    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) showFeatured(featuredIndex + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
