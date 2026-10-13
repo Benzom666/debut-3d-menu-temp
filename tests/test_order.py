@@ -24,7 +24,7 @@ class OrderingExperienceTests(unittest.TestCase):
         page = self.browser.new_page(viewport={"width": 1440, "height": 900})
         page.goto((ROOT / "dist" / "index.html").as_uri())
         self.assertTrue(page.locator(".home-hero").is_visible())
-        self.assertIn("The night", page.get_by_role("heading", level=1).inner_text())
+        self.assertIn("THE NIGHT", page.get_by_role("heading", level=1).inner_text())
         self.assertEqual(page.locator("#featured-image").count(), 0)
         self.assertGreater(page.locator('a[href="order/"]').count(), 0)
         page.close()

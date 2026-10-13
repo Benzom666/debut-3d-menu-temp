@@ -36,6 +36,34 @@ class DebutSiteTests(unittest.TestCase):
         self.assertTrue(page.get_by_role("link", name="Staff login", exact=False).first.get_attribute("href").startswith("https://debutbar.ca/admin"))
         page.close()
 
+    def test_homepage_leads_with_the_supplied_video_and_clear_actions(self):
+        page = self.open_page()
+        video = page.locator('.home-hero video')
+        self.assertEqual(video.count(), 1)
+        self.assertTrue(video.evaluate('el => el.autoplay && el.loop && el.muted && el.playsInline'))
+        self.assertTrue(video.get_attribute('poster').endswith('debut-night-poster.webp'))
+        self.assertTrue(video.locator('source').get_attribute('src').endswith('debut-night.mp4'))
+        self.assertGreater(video.evaluate('el => el.videoWidth'), 0)
+        self.assertGreater(page.locator('.home-hero a[href="book/"]').count(), 0)
+        self.assertGreater(page.locator('.home-hero a[href="menu/"]').count(), 0)
+        page.close()
+
+    def test_homepage_video_and_actions_fit_mobile(self):
+        page = self.open_page(width=390)
+        self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 390)
+        video = page.locator('.home-hero video')
+        self.assertTrue(video.is_visible())
+        self.assertGreater(video.bounding_box()['height'], 300)
+        self.assertTrue(page.locator('.home-hero a[href="book/"]').is_visible())
+        self.assertTrue(page.locator('.home-hero a[href="menu/"]').is_visible())
+        page.close()
+
+    def test_homepage_video_respects_reduced_motion(self):
+        page = self.browser.new_page(reduced_motion='reduce')
+        page.goto((ROOT / 'index.html').as_uri())
+        self.assertTrue(page.locator('.home-hero video').evaluate('el => el.paused'))
+        page.close()
+
     def test_every_route_uses_the_same_header_and_mobile_navigation(self):
         routes = ("index.html", "restaurant/index.html", "menu/index.html", "order/index.html", "events/index.html", "private-events/index.html", "book/index.html", "contact/index.html")
         expected = ["Home", "Restaurant", "Menu", "Pickup", "Events", "Contact", "Book a table"]
