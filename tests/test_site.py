@@ -62,6 +62,22 @@ class DebutSiteTests(unittest.TestCase):
         self.assertGreater(nightlife.evaluate('el => el.videoWidth'), 0)
         page.close()
 
+    def test_homepage_uses_only_the_supplied_media(self):
+        page = self.open_page()
+        self.assertEqual(
+            page.locator('main img').evaluate_all(
+                "images => images.map(image => image.getAttribute('src'))"
+            ),
+            ['media/restaurant-lounge.webp', 'media/debut-food-feature.webp'],
+        )
+        self.assertEqual(
+            page.locator('main video source').evaluate_all(
+                "sources => sources.map(source => source.getAttribute('src'))"
+            ),
+            ['media/debut-night.mp4', 'media/debut-night-wide.mp4'],
+        )
+        page.close()
+
     def test_homepage_video_and_actions_fit_mobile(self):
         page = self.open_page(width=390)
         self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 390)
