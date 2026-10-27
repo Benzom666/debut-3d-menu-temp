@@ -48,6 +48,20 @@ class DebutSiteTests(unittest.TestCase):
         self.assertGreater(page.locator('.home-hero a[href="menu/"]').count(), 0)
         page.close()
 
+    def test_homepage_uses_the_new_food_and_nightlife_media(self):
+        page = self.open_page()
+        food = page.locator('.menu-feature-art img')
+        self.assertTrue(food.get_attribute('src').endswith('debut-food-feature.webp'))
+        self.assertGreater(food.evaluate('image => image.naturalWidth'), 0)
+
+        nightlife = page.locator('.private-feature video')
+        self.assertEqual(nightlife.count(), 1)
+        self.assertTrue(nightlife.evaluate('el => el.autoplay && el.loop && el.muted && el.playsInline'))
+        self.assertTrue(nightlife.get_attribute('poster').endswith('debut-night-wide-poster.webp'))
+        self.assertTrue(nightlife.locator('source').get_attribute('src').endswith('debut-night-wide.mp4'))
+        self.assertGreater(nightlife.evaluate('el => el.videoWidth'), 0)
+        page.close()
+
     def test_homepage_video_and_actions_fit_mobile(self):
         page = self.open_page(width=390)
         self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 390)
@@ -61,7 +75,9 @@ class DebutSiteTests(unittest.TestCase):
     def test_homepage_video_respects_reduced_motion(self):
         page = self.browser.new_page(reduced_motion='reduce')
         page.goto((ROOT / 'index.html').as_uri())
-        self.assertTrue(page.locator('.home-hero video').evaluate('el => el.paused'))
+        videos = page.locator('video')
+        self.assertEqual(videos.count(), 2)
+        self.assertTrue(all(videos.evaluate_all('elements => elements.map(el => el.paused)')))
         page.close()
 
     def test_every_route_uses_the_same_header_and_mobile_navigation(self):
