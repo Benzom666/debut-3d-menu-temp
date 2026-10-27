@@ -4,6 +4,7 @@ __pycache__/
 check-page-*.png
 .sites-runtime/
 .venv/
+.worktrees/
 image_sources.json
 *.tar.gz
 *.pindex.tmp
