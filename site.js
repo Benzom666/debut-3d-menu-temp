@@ -1,8 +1,10 @@
 (() => {
-  const heroVideo = document.querySelector('.home-hero video');
-  if (heroVideo && matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    heroVideo.autoplay = false;
-    heroVideo.pause();
+  const motionReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (motionReduced) {
+    document.querySelectorAll('video[autoplay]').forEach(video => {
+      video.autoplay = false;
+      video.pause();
+    });
   }
   const toggle = document.querySelector('.nav-toggle');
   const nav = document.getElementById('global-nav');
