@@ -55,7 +55,7 @@
       thumbnail.decoding = 'async';
       thumbnail.width = 320;
       thumbnail.height = 320;
-      visual.append(thumbnail, make('span', 'visual-action', 'VIEW DISH ↗'));
+      visual.append(thumbnail, make('span', 'visual-action', 'VIEW DISH'));
       visual.addEventListener('click', () => openViewer(entryIndex));
       article.append(visual);
       const top = make('div', 'item-top');

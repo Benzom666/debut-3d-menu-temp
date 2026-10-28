@@ -66,7 +66,7 @@
     cta.href = 'https://www.instagram.com/debutbar.ca/';
     cta.target = '_blank';
     cta.rel = 'noopener noreferrer';
-    cta.innerHTML = 'Latest on Instagram <span>↗</span>';
+    cta.textContent = 'Latest on Instagram';
     for (const selector of ['.event-poster', '#dates', '.event-banner']) {
       document.querySelector(selector).hidden = true;
     }
