@@ -1,3 +1,4 @@
+import re
 import unittest
 from pathlib import Path
 
@@ -76,6 +77,51 @@ class DebutSiteTests(unittest.TestCase):
             ),
             ['media/debut-night.mp4', 'media/debut-night-wide.mp4'],
         )
+        page.close()
+
+    def test_public_pages_do_not_use_arrow_glyphs_as_controls(self):
+        for path in (
+            'index.html',
+            'restaurant/index.html',
+            'private-events/index.html',
+            'events/index.html',
+            'book/index.html',
+            'contact/index.html',
+            'menu/index.html',
+            'order/index.html',
+        ):
+            page = self.open_page(path)
+            self.assertIsNone(
+                re.search(r'[↗→←↑↓]', page.locator('body').text_content()),
+                path,
+            )
+            page.close()
+
+    def test_primary_pages_use_a_light_warm_canvas(self):
+        for path in ('index.html', 'menu/index.html', 'order/index.html'):
+            page = self.open_page(path)
+            luminance = page.evaluate(r"""
+                () => {
+                    const rgb = getComputedStyle(document.body).backgroundColor
+                        .match(/\d+(?:\.\d+)?/g).slice(0, 3).map(Number);
+                    const channels = rgb.map(value => {
+                        const channel = value / 255;
+                        return channel <= 0.04045
+                            ? channel / 12.92
+                            : Math.pow((channel + 0.055) / 1.055, 2.4);
+                    });
+                    return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+                }
+            """)
+            self.assertGreater(luminance, 0.72, path)
+            page.close()
+
+        page = self.open_page()
+        feature_rgb = page.locator('.menu-feature').evaluate(r"""
+            element => getComputedStyle(element).backgroundColor
+                .match(/\d+(?:\.\d+)?/g).slice(0, 3).map(Number)
+        """)
+        self.assertGreater(max(feature_rgb) - min(feature_rgb), 45)
         page.close()
 
     def test_homepage_video_and_actions_fit_mobile(self):

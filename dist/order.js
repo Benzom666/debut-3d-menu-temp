@@ -199,7 +199,7 @@
     const tax=Math.round(subtotal*taxRate);
     const total=subtotal+tax;
     const items=dishes.filter(d=>cart[d.id]).map(d=>({name:d.name,quantity:cart[d.id],unit_price:money(d.price),line_total:money(d.price*cart[d.id])}));
-    const lines=items.map(d=>`${d.quantity} × ${d.name} — ${d.line_total}`);
+    const lines=items.map(d=>`${d.quantity} × ${d.name}— ${d.line_total}`);
     const name=form.elements.name.value.trim(),email=form.elements.email.value.trim(),phone=form.elements.phone.value.trim();
     const date=form.elements.date.value,time=form.elements.time.value,notes=form.elements.notes.value.trim();
     const message=[`Pickup request ${ref}`,'',...lines,'',`Subtotal: ${money(subtotal/100)}`,`Estimated HST (13%): ${money(tax/100)}`,`Estimated total: ${money(total/100)}`,'',`Name: ${name}`,`Email: ${email}`,`Phone: ${phone}`,`Preferred pickup: ${date} at ${time}`,`Notes: ${notes || 'None'}`,'','Please reply to confirm availability, final pricing, and pickup time.'].join('\n');
@@ -226,7 +226,7 @@
       status.textContent='Could not send your request. Try again, use Email instead, or call +1 942 883 3288.';
       $('email-link').hidden=false;
       submitButton.disabled=false;
-      submitButton.innerHTML='PLACE PICKUP REQUEST <span>↗</span>';
+      submitButton.innerHTML='PLACE PICKUP REQUEST <span></span>';
     }
   });
   $('new-request').addEventListener('click',()=>{$('request-result').hidden=true;$('order-form').hidden=false});

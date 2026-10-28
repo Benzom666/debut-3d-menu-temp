@@ -70,3 +70,28 @@
 /* Keep the cart in view so the dish flight has a visible destination. */
 .order-page .global-header{position:sticky;top:0;z-index:70}
 .order-page .fly-dish{transition:none;object-fit:contain}
+
+/* Afterglow Line pickup surface. */
+:root{--color-bg:#f7f0e5;--color-panel:#eedfcc;--color-cream:#263027;--color-muted:#5c655e;--color-gold:#7a3040;--color-line:rgba(38,48,39,.2)}
+body.order-page{background:var(--color-bg);color:var(--color-cream)}
+body.order-page ::selection{background:var(--color-gold);color:#fff8ef}
+.order-header{background:rgba(247,240,229,.97);box-shadow:0 12px 35px rgba(54,43,31,.08)}
+.cart-count,.purchase-row button,.send-request{background:var(--color-gold);color:#fff8ef}
+.stage-intro h1 span,.order-kicker,.dish-rail small,.browser-controls label,.order-end span{color:var(--color-gold)}
+.stage-pager button{width:auto;min-width:78px;padding:0 12px;color:var(--color-gold);font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.stage-pager button:hover{background:var(--color-gold);color:#fff8ef}
+.plate-halo{background:radial-gradient(circle,rgba(199,109,73,.2),rgba(199,109,73,.05) 54%,transparent 70%)}
+.featured-image{filter:drop-shadow(0 30px 28px rgba(68,49,36,.24))}
+.dish-browser{background:var(--color-panel)}
+.browser-controls input{color:var(--color-cream)}
+.category-filters button.active,.category-filters button:hover{background:var(--color-gold);color:#fff8ef}
+.dish-rail button{background:#fffaf3;color:var(--color-cream)}
+.dish-rail button:hover,.dish-rail button.active{background:#dce3d3}
+.cart-backdrop{background:rgba(38,48,39,.5)}
+.cart-drawer{background:var(--color-bg)}
+#order-form input,#order-form select,#order-form textarea{background:#fffaf3;color:var(--color-cream);color-scheme:light}
+#order-form input::placeholder,#order-form textarea::placeholder{color:#6f756f}
+.request-result a{background:var(--color-gold);color:#fff8ef}
+.order-status[data-kind="error"]{color:#8d2f3d}
+.order-end{background:var(--sage,#dce3d3)}
+@media(max-width:800px){.order-header nav{background:var(--color-bg);box-shadow:0 20px 30px rgba(54,43,31,.14)}}
