@@ -224,7 +224,7 @@
         {
           "name": "Quarter Chicken Leg",
           "price": 23,
-          "description": "Tender boneless chicken leg served with fragrant herbed rice, fresh salad and a ladle of butter chicken gravy. Comforting and generous."
+          "description": "Roasted chicken leg quarter served with basmati rice, fresh salad and curry gravy."
         },
         {
           "name": "Teriyaki Grilled Salmon",
@@ -242,9 +242,9 @@
           "description": "Premium grilled chicken breast with a creamy mushroom sauce, served with roasted potatoes, broccoli and carrots."
         },
         {
-          "name": "2 Half Racks of BBQ Spare Ribs",
+          "name": "Half Rack of BBQ Spare Ribs",
           "price": 33,
-          "description": "Two half racks of pork spare ribs brushed with house BBQ sauce, served with roasted potatoes, broccoli, carrots and coleslaw. Made for big appetites.",
+          "description": "A half rack of pork spare ribs brushed with house BBQ sauce, served with fries and coleslaw.",
           "tags": [
             "Chef's choice"
           ]
@@ -295,9 +295,9 @@
           ]
         },
         {
-          "name": "Chicken Samosa",
+          "name": "Samosas with Curry",
           "price": 16,
-          "description": "Five crisp Indian-style chicken samosas served with a rich butter chicken gravy for dipping. A guest favourite."
+          "description": "Five crisp vegetable samosas served with a meat-free curry sauce for dipping."
         },
         {
           "name": "Veggie Pad Thai",
@@ -424,7 +424,7 @@
         {
           "name": "Side add-on",
           "price": 2,
-          "description": "Add a side salad or seasoned rice to round out your meal."
+          "description": "Add a side salad or basmati rice to round out your meal."
         },
         {
           "name": "Extra add-on",
@@ -623,8 +623,8 @@
       "items": [
         {
           "name": "9 for 9",
-          "priceLabel": "9.99",
-          "description": "Pick bruschetta, warm spinach dip, Chicken 65, butter chicken poutine, chicken samosa, spicy mussels, fettuccine Alfredo, Caesar salad bowl or nachos. Weekdays 5 to 7 pm. Dine-in only."
+          "priceLabel": "$9 each",
+          "description": "Choose from 9 items at $9 each: bruschetta, warm spinach dip, Chicken 65, butter chicken poutine, samosas with curry, spicy mussels, fettuccine Alfredo, Caesar salad bowl or nachos. Weekdays 5 to 7 pm. Dine-in only."
         },
         {
           "name": "Happy Hour",
