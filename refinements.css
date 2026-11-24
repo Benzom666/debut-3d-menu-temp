@@ -1,0 +1,123 @@
+/* Début — restrained refinement of the existing Afterglow identity. */
+@media screen {
+  :root { --debut-ease: cubic-bezier(.2,.65,.3,1); --debut-text-on-dark: #ddd9cf; }
+  html { scroll-padding-top: 24px; }
+  body.full-site p { line-height: 1.65; }
+  body.full-site h1, body.full-site h2, body.full-site h3 { letter-spacing: -.035em; text-wrap: balance; }
+  body.full-site h2 { line-height: 1.08; }
+  body.full-site ::selection { background: var(--wine); color: var(--on-dark); }
+  .global-nav>a, .order-link { letter-spacing: .09em; font-size: 11px; }
+  .global-nav>a { padding-block: 14px; text-underline-offset: 7px; }
+  .global-nav>a[aria-current] { text-decoration: underline; text-decoration-thickness: 1px; }
+  .reserve-link, .button-gold, .hero-cta { box-shadow: none; }
+  .reserve-link, .button-gold, .button-outline { min-height: 46px; letter-spacing: .09em; }
+  .button-gold span:empty, .button-outline span:empty, .reserve-link span:empty { display: none; }
+  .button-gold, .button-outline, .reserve-link, .footer-book { transition: background-color 180ms var(--debut-ease), color 180ms var(--debut-ease); }
+  .button-gold:hover, .button-outline:hover, .reserve-link:hover { transform: none; }
+  .section-kicker { letter-spacing: .16em; }
+  .home-page .home-hero h1 { font-size: clamp(64px, 7.2vw, 108px); line-height: 1.03; }
+  .home-page .home-hero-content>p:not(.section-kicker) { max-width: 33ch; font-size: 17px; }
+  .home-page .hero-video { box-shadow: none; }
+  .home-page .hero-video video { filter: brightness(.96); }
+  .home-page .intro-section { padding-top: 88px; padding-bottom: 74px; }
+  .intro-heading h2, .events-head h2, .feature-copy h2, .story-lead h2, .story-text h2, .booking-details h2 { font-size: clamp(42px, 4.4vw, 66px); }
+  .intro-right p, .story-lead p:last-child { max-width: 50ch; font-size: 17px; }
+  .home-page .experience-photo-wide, .home-gallery figure { box-shadow: none; }
+  .home-page .experience-photo-wide img, .home-gallery img, .gallery-item img { filter: none; }
+  .home-gallery { padding-bottom: 88px; }
+  .home-gallery-grid { gap: 24px; row-gap: 32px; align-items: start; }
+  .home-gallery figure { background: transparent; overflow: visible; }
+  .home-gallery figure img { height: calc(100% - 32px); object-fit: cover; }
+  .home-gallery figcaption { position: static; padding: 12px 0 0; background: none; font-size: 10px; letter-spacing: .12em; color: var(--muted-ink); }
+  .home-gallery figure:hover img, .gallery-item:hover img { transform: none; }
+  .home-gallery figure:nth-child(2) img { object-position: 50% center; }
+  .home-gallery figure:nth-child(4) img { object-position: center 38%; }
+  .home-gallery figure:nth-child(6) img { object-position: center 44%; }
+  .home-page .menu-feature, .home-page .events-feature { padding-top: 80px; padding-bottom: 80px; }
+  .home-page .private-content h2, .restaurant-closing h2 { font-size: clamp(48px, 5.4vw, 80px); }
+  .home-page .private-content>p:not(.section-kicker), .restaurant-closing p:not(.section-kicker) { max-width: 44ch; }
+  .interior-hero h1, .events-hero h1, .booking-hero h1, .contact-hero h1, .pe-hero h1 { font-size: clamp(64px, 7.4vw, 108px); line-height: 1.02; }
+  .interior-hero .section-kicker, .restaurant-closing .section-kicker, .private-feature .section-kicker { color: #eee1c8; }
+  .story-lead { padding-top: 85px; padding-bottom: 85px; }
+  .story-block { padding-bottom: 88px; }
+  .story-text>p:not(.section-kicker) { max-width: 43ch; }
+  .restaurant-gallery { padding-top: 80px; padding-bottom: 88px; }
+  .gallery-head { align-items: center; margin-bottom: 36px; }
+  .gallery-head h2 { font-size: clamp(44px, 5vw, 72px); }
+  .gallery-grid { gap: 24px; row-gap: 32px; }
+  .gallery-item { overflow: visible; background: transparent; }
+  .gallery-item img { height: calc(100% - 32px); }
+  .gallery-item figcaption { position: static; padding: 12px 0 0; color: var(--muted-ink); background: none; letter-spacing: .1em; line-height: 1.5; }
+  .gallery-item:nth-child(7) img { object-position: center 40%; }
+  .booking-card, .reserve-form-wrap, .pe-options article { box-shadow: none; }
+  .booking-card small, .reserve-note { color: #505b52; line-height: 1.6; }
+  .pe-options p { line-height: 1.65; }
+  .footer-top h2 { font-size: clamp(44px, 5.4vw, 80px); }
+  .footer-top { padding-top: 64px; padding-bottom: 56px; }
+  .footer-grid { padding-top: 42px; padding-bottom: 48px; }
+  .footer-grid a { line-height: 1.6; }
+  .footer-bottom { letter-spacing: .06em; }
+  /* The original menu's dark cards were inheriting dark text from its light theme. */
+  .menu-page .menu-item .item-description { color: var(--debut-text-on-dark); font-size: 14px; line-height: 1.65; }
+  .menu-page .menu-item .item-name { color: #fff8ef; line-height: 1.25; }
+  .menu-page .menu-item .item-price { color: #e4bd7b; }
+  .menu-page .menu-item:hover { box-shadow: none; border-color: #998871; }
+  .menu-page .item-visual { background: #1d211d; }
+  .menu-page .menu-item .item-tag { color: #e4bd7b; font-size: 10px; }
+  .menu-page .section-number { display: none; }
+  .menu-page .section-title { font-size: clamp(38px, 4vw, 58px); }
+  .menu-page .hero h1 { font-size: clamp(60px, 7vw, 96px); }
+  .menu-page .hero-dish-controls button { min-height: 44px; }
+  .order-page .featured-description { line-height: 1.65; }
+  .order-page .illustration-note { line-height: 1.5; }
+  .full-site :focus-visible, .menu-page :focus-visible { outline: 3px solid #ae7131; outline-offset: 4px; }
+  @media (max-width: 1120px) {
+    .global-nav { gap: 16px; }
+    .global-brand { min-width: 180px; }
+    .global-header { gap: 16px; }
+    .global-header .order-link { display: none; }
+  }
+  @media (max-width: 800px) {
+    .global-nav>a { min-height: 44px; display: flex; align-items: center; }
+    .global-header { padding-inline: 24px; }
+    .nav-toggle { min-width: 44px; min-height: 44px; }
+    .home-gallery-grid { gap: 20px; }
+    .gallery-grid { gap: 20px; row-gap: 28px; }
+    .gallery-head>p { max-width: 45ch; }
+  }
+  @media (max-width: 600px) {
+    .home-page .home-hero { grid-template-rows: min(43vh,360px) auto; }
+    .home-page .home-hero h1 { font-size: clamp(46px, 12vw, 66px); }
+    .home-page .home-hero-content { padding-top: 30px; padding-bottom: 74px; }
+    .home-page .home-hero-content>p:not(.section-kicker) { font-size: 16px; margin-top: 20px; }
+    .home-page .hero-actions { gap: 12px; }
+    .home-page .hero-actions a { padding: 14px; font-size: 10px; flex: 1; }
+    .home-page .intro-section { padding-top: 58px; padding-bottom: 56px; }
+    .home-page .experience-grid { padding-bottom: 48px; }
+    .home-gallery { padding-bottom: 56px; }
+    .home-gallery figure:nth-child(n) { height: 310px; margin-bottom: 24px; }
+    .home-gallery figure:nth-child(4) { height: 400px; }
+    .home-gallery figure:last-child { margin-bottom: 0; }
+    .home-page .menu-feature, .home-page .events-feature { padding-top: 56px; padding-bottom: 56px; }
+    .intro-heading h2, .events-head h2, .feature-copy h2, .story-lead h2, .story-text h2, .booking-details h2 { font-size: clamp(38px, 10vw, 48px); }
+    .interior-hero h1, .events-hero h1, .booking-hero h1, .contact-hero h1, .pe-hero h1 { font-size: clamp(56px, 14vw, 74px); }
+    .story-lead, .restaurant-gallery { padding-top: 56px; padding-bottom: 56px; }
+    .story-block { padding-bottom: 56px; }
+    .gallery-head h2 { font-size: 44px; }
+    .gallery-item:nth-child(n) { height: 330px; margin-bottom: 24px; }
+    .gallery-item:nth-child(7) { height: 460px; }
+    .gallery-item:last-child { margin-bottom: 0; }
+    .footer-top { padding-top: 48px; padding-bottom: 40px; }
+    .footer-top h2 { font-size: 46px; }
+    .footer-book { margin-top: 24px; min-height: 48px; }
+    .footer-grid { padding-top: 36px; padding-bottom: 36px; }
+    .menu-page .hero h1 { font-size: 62px; }
+  }
+  @media (hover: none) {
+    .menu-page .item-visual:hover .item-image { transform: scale(.92); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  }
+}

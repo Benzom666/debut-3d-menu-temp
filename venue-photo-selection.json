@@ -1,0 +1,24 @@
+{
+  "source_folder": "/Users/benzom/Downloads/DEBUT INTERIOR PHOTOS",
+  "selection": {
+    "venue-bar-wide": "DSC02626.JPG",
+    "venue-dining-wide": "DSC02664.JPG",
+    "venue-booths-wide": "DSC02662.JPG",
+    "venue-patio-wide": "DSC02672.JPG",
+    "venue-window-seating": "DSC02621.JPG",
+    "venue-light-arches": "DSC02649.JPG",
+    "venue-storefront-night": "DSC02653.JPG",
+    "venue-lounge-entry": "DSC02617.JPG",
+    "venue-ceiling-detail": "DSC02661.JPG",
+    "venue-host-desk": "DSC02668.JPG"
+  },
+  "excluded": [
+    "DSC02659.JPG",
+    "DSC02660.JPG",
+    "DSC02677.JPG",
+    "DSC02678.JPG",
+    "DSC02679.JPG"
+  ],
+  "notes": "Empty venue photos only. Original photographs resized and encoded as WebP; no generative edits. Existing in-progress gallery edits preserved.",
+  "curation": "One representative per distinct scene; burst duplicates, near-identical angles, food and portrait photos excluded. No repeated image within either gallery."
+}
